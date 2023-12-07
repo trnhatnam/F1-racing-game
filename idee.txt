@@ -1,0 +1,47 @@
+Jeu de management d'équipe :
+- Sport en particulier : 
+	- si jeu solo en multijoueur comme cyclisme : stat vélo, stat joueur, jeu aléatoire mais prend en compte les stat -> mario kart
+	- si jeu équipe : stat des joueurs, jeu aléatoire
+
+Jeu incrémental:
+- type subway surfer : F1 
+- map randomisé : résoudre le plus de labyirnthe possible
+- type penalty
+
+
+Jeu 1V1 : 
+- chat sur une map randomisé et temps limité
+- ping pong, hockey,  balle de plus en plus rapide
+
+
+-> focus sur des aspects compétitifs du jeu
+
+Jeu 1V1 chat 
+Jeu ping pong
+Jeu type penalty
+Jeu map randomisé
+Jeu management équipe
+
+
+Choix :
+
+Jeu incrémental de type formule 1 
+	- Joueur, obstacle, modèle de voiture, partie, nombre de dégats, bonus récupéré + classes liés à l'interface graphique
+	- changer de voie, hors de piste  -> perte de vitesse
+	- 5 colonnes + 2 hors-pistes
+	- vitesse = 0 -> fin du jeu
+
+
+
+Jeu management solo 
+	- Classes : Joueurs, Equipes, Tournoi, Vélo + Equipement + composants, + classes lié à l'interface graphique, simulation de la course. Gestion de moral, endurance si possible
+
+
+
+
+
+
+
+
+
+
