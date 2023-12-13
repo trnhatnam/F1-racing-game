@@ -4,7 +4,7 @@
 int main()
 {
     // on crée la fenêtre
-    sf::RenderWindow window(sf::VideoMode(720, 720), "Tilemap");
+    sf::RenderWindow window(sf::VideoMode(960, 960), "Tilemap");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(false);
 
@@ -32,14 +32,19 @@ int main()
     // pour simuler une tilemap infini, on crée 2 tilemap
     TileMap map;
     TileMap map2;
+    TileMap map3;
     sf::View view = window.getView();
-    map.setPosition(-120.f, 0.f);
-    map2.setPosition(-120.f, -960.f);
+    map.setPosition(0.f, 0.f);
+    map2.setPosition(0.f, -960.f);
+    map3.setPosition(0.f, -960.f*2);
 
     if (!map.load("tileset.png", sf::Vector2u(64, 64), level, 15, 15))
         return -1;
     
     if (!map2.load("tileset.png", sf::Vector2u(64, 64), level, 15, 15))
+        return -1;
+
+    if (!map3.load("tileset.png", sf::Vector2u(64, 64), level, 15, 15))
         return -1;
 
     // sprite
@@ -49,7 +54,7 @@ int main()
         return -1;
     voiture.setTexture(textureVoiture);
     voiture.setPosition(sf::Vector2f(320.f, 600.f));
-    
+    float vitesse = 10.f;
 
     // on fait tourner la boucle principale
     while (window.isOpen())
@@ -62,19 +67,23 @@ int main()
                 window.close();
         }
 
+        if  (map.getPosition().y > 960.f - vitesse)
+            map.setPosition(0.f, -960.f);
+        if  (map2.getPosition().y > 960.f - vitesse)
+            map2.setPosition(0.f, -960.f);
+        if  (map3.getPosition().y > 960.f - vitesse)
+            map3.setPosition(0.f, -960.f);
         
-        map.move(0.f,1.f);
-        map2.move(0.f,1.f);
+        map.move(0.f,vitesse);
+        map2.move(0.f,vitesse);
+        map3.move(0.f,vitesse);
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             voiture.move(-3.f, 0.f);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             voiture.move(3.f, 0.f);
 
-        if  (map.getPosition().y > 480.f)
-            map.setPosition(-120.f, 0.f);
-        if  (map2.getPosition().y > 480.f)
-            map2.setPosition(-120.f, 0.f);
+        
 
 
         // on dessine le niveau
