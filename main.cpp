@@ -82,7 +82,8 @@ int main()
             voiture.move(-3.f, 0.f);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
             voiture.move(3.f, 0.f);
-
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            window.close();
         
 
 
