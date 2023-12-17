@@ -2,9 +2,6 @@
 #include <SFML/Graphics.hpp>
 class ElementDeJeu: public sf::Sprite{
     protected:
-        int _longueur;
-        int _largeur;
-        int _resistance;
-        float _x;
-        float _y;
+        int resistance;
+        float vitesseRelative; // ce sera par rapport à la voiture du joueur
 };
