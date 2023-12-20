@@ -23,6 +23,7 @@ public:
     void updateChronoDistance(float mapPosY, float vitesse);
     void updateVitesse(float distance);
     void draw(sf::RenderWindow& window);
+    void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
 };
 
 #endif // CHRONO_DISTANCE_CALCULATOR_H
