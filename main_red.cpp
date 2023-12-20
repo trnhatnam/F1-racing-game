@@ -10,7 +10,7 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(960, 960), "Tilemap");
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(false);
 
     int level[] =
