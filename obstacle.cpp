@@ -1,6 +1,6 @@
 #include "obstacle.hh"
 
-void Obstacle::collision(Voiture v)
+void Obstacle::collision(Obstacle& v)
 {
 
 }
