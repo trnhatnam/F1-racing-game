@@ -3,45 +3,45 @@
 Voiture::Voiture(float x, float y, float speed, float maxSpeed, const sf::Texture& texture)
     : _speed(speed), _maxSpeed(maxSpeed) {
     // mise en place de la texture
-    sprite.setTexture(texture);
+    this->sprite.setTexture(texture);
     // positionnement de la voiture
-    sprite.setPosition(x, y);
+    this->sprite.setPosition(x, y);
     // mise a l'echelle du sprite de la voiture
-    sprite.setScale(1.5f,1.5f);
+    this->sprite.setScale(1.5f,1.5f);
 }
 
 void Voiture::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    states.transform *= getTransform();
+    states.transform *= this->getTransform();
     // dessine le sprite de la voiture avec les transformations appliquées
-    target.draw(sprite, states);
+    target.draw(this->sprite, states);
 }
 
 float Voiture::getX() const {
-    return sprite.getPosition().x;
+    return this->sprite.getPosition().x;
 }
 
 float Voiture::getY() const {
-    return sprite.getPosition().y;
+    return this->sprite.getPosition().y;
 }
 
 float Voiture::getSpeed() const {
-    return _speed;
+    return this->_speed;
 }
 
 float Voiture::getMaxSpeed() const {
-    return _maxSpeed;
+    return this->_maxSpeed;
 }
 
 void Voiture::move(float offsetX, float offsetY) {
-    sprite.move(offsetX, offsetY);
+    this->sprite.move(offsetX, offsetY);
 }
 
 void Voiture::startSpeedUp() {
-    _speed += 5.0;
+    this->_speed += 5.0;
 }
 
 void Voiture::SpeedUp() {
-    _speed += 0.01;
-    if (_speed > _maxSpeed)
-        _speed = _maxSpeed;
+    this->_speed += 0.01;
+    if (this->_speed > this->_maxSpeed)
+        this->_speed = this->_maxSpeed;
 }

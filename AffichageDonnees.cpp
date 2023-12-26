@@ -1,51 +1,51 @@
 #include "AffichageDonnees.hh"
 
 AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcourue(0.f) {
-    if (!font.loadFromFile("fonts/chrono_pixel/nuvel.ttf")) {
+    if (!this->font.loadFromFile("fonts/chrono_pixel/nuvel.ttf")) {
         std::cerr << "Erreur pour la police" << std::endl;
     }
 
-    chronoText.setFont(font);
-    chronoText.setCharacterSize(24);
-    chronoText.setFillColor(sf::Color::Black);
-    chronoText.setPosition(32.f, 10.f);
-    chronoText.setScale(2.f, 2.f);
+    this->chronoText.setFont(this->font);
+    this->chronoText.setCharacterSize(24);
+    this->chronoText.setFillColor(sf::Color::Black);
+    this->chronoText.setPosition(32.f, 10.f);
+    this->chronoText.setScale(2.f, 2.f);
 
-    distanceText.setFont(font);
-    distanceText.setCharacterSize(18);
-    distanceText.setFillColor(sf::Color::White);
-    distanceText.setPosition(416.f, 700.f);
-    distanceText.setScale(2.f, 2.f);
+    this->distanceText.setFont(this->font);
+    this->distanceText.setCharacterSize(18);
+    this->distanceText.setFillColor(sf::Color::White);
+    this->distanceText.setPosition(416.f, 700.f);
+    this->distanceText.setScale(2.f, 2.f);
 
-    vitesseText.setFont(font);
-    vitesseText.setCharacterSize(24);
-    vitesseText.setFillColor(sf::Color::Black);
-    vitesseText.setPosition(32.f, 150.f);
-    vitesseText.setScale(1.5f, 1.5f);
+    this->vitesseText.setFont(this->font);
+    this->vitesseText.setCharacterSize(24);
+    this->vitesseText.setFillColor(sf::Color::Black);
+    this->vitesseText.setPosition(32.f, 150.f);
+    this->vitesseText.setScale(1.5f, 1.5f);
 }
 
 void AffichageDonnees::startChrono() {
-    startTime = std::chrono::steady_clock::now();
+    this->startTime = std::chrono::steady_clock::now();
 }
 
 void AffichageDonnees::updateChronoDistance(float mapPosY, float vitesse) {
-    if (mapPosY > initialMapPositionY) {
-        distanceParcourue += mapPosY - initialMapPositionY;
-        initialMapPositionY = mapPosY;
+    if (mapPosY > this->initialMapPositionY) {
+        this->distanceParcourue += mapPosY - this->initialMapPositionY;
+        this->initialMapPositionY = mapPosY;
     }
-    else if (mapPosY < initialMapPositionY) {
-        distanceParcourue += initialMapPositionY - mapPosY;
-        initialMapPositionY = mapPosY;
+    else if (mapPosY < this->initialMapPositionY) {
+        this->distanceParcourue += this->initialMapPositionY - mapPosY;
+        this->initialMapPositionY = mapPosY;
     }
 
-    float distanceParcourueMetres = distanceParcourue / (64.f / 1.5f);
+    float distanceParcourueMetres = this->distanceParcourue / (64.f / 1.5f);
 
     std::ostringstream stream;
     stream << std::fixed << std::setprecision(2) << distanceParcourueMetres;
     std::string distanceStr = stream.str();
-    distanceText.setString(distanceStr + " m");
+    this->distanceText.setString(distanceStr + " m");
 
-    updateVitesse(distanceParcourueMetres);
+    this->updateVitesse(distanceParcourueMetres);
 }
 
 void AffichageDonnees::updateVitesse(float distance) {
@@ -63,7 +63,7 @@ void AffichageDonnees::updateVitesse(float distance) {
     std::string timeStr = minutesStr + " : " +
                         secondsStr + " : " +
                         std::to_string(milliseconds);
-    chronoText.setString(timeStr);
+    this->chronoText.setString(timeStr);
 
     float tempsSeconde = elapsedMs.count() / 1000.f;
     float vitesseMS = distance / tempsSeconde;
@@ -72,13 +72,13 @@ void AffichageDonnees::updateVitesse(float distance) {
     std::ostringstream stream_speed;
     stream_speed << std::fixed << std::setprecision(2) << vitesse_KmH;
     std::string vitesseStr = stream_speed.str();
-    vitesseText.setString(vitesseStr + " Km/h");
+    this->vitesseText.setString(vitesseStr + " Km/h");
 }
 
 void AffichageDonnees::draw(sf::RenderWindow& window) {
-    window.draw(chronoText);
-    window.draw(distanceText);
-    window.draw(vitesseText);
+    window.draw(this->chronoText);
+    window.draw(this->distanceText);
+    window.draw(this->vitesseText);
 }
 
 void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed) {
