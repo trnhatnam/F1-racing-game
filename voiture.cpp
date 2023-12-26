@@ -54,7 +54,7 @@ void Voiture::SpeedUp() {
 
 void Voiture::UseOfOil() {
     if (_speed > 0.0){
-        _actualOil -= 0.01*sqrt(0.01*_speed);
+        _actualOil -= 0.01*sqrt(_speed);
         if (_actualOil < 0.0)
             _actualOil = 0.0;
     } else {
