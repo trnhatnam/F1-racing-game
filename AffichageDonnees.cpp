@@ -25,7 +25,7 @@ AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcour
 }
 
 void AffichageDonnees::startChrono() {
-    this->startTime = std::chrono::steady_clock::now();
+    startTime.restart();
 }
 
 void AffichageDonnees::updateChronoDistance(float mapPosY, float vitesse) {
@@ -49,13 +49,12 @@ void AffichageDonnees::updateChronoDistance(float mapPosY, float vitesse) {
 }
 
 void AffichageDonnees::updateVitesse(float distance) {
-    std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-    std::chrono::milliseconds elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - startTime);
+    sf::Time elapsedTime = this->startTime.getElapsedTime();
 
-    int totalSeconds = static_cast<int>(elapsedMs.count() / 1000);
+    int totalSeconds = static_cast<int>(elapsedTime.asMilliseconds() / 1000);
     int minutes = totalSeconds / 60;
     int seconds = totalSeconds % 60;
-    int milliseconds = static_cast<int>(elapsedMs.count() % 1000);
+    int milliseconds = static_cast<int>(elapsedTime.asMilliseconds() % 1000);
 
     std::string minutesStr = (minutes < 10) ? "0" + std::to_string(minutes) : std::to_string(minutes);
     std::string secondsStr = (seconds < 10) ? "0" + std::to_string(seconds) : std::to_string(seconds);
@@ -65,7 +64,7 @@ void AffichageDonnees::updateVitesse(float distance) {
                         std::to_string(milliseconds);
     this->chronoText.setString(timeStr);
 
-    float tempsSeconde = elapsedMs.count() / 1000.f;
+    float tempsSeconde = elapsedTime.asSeconds();
     float vitesseMS = distance / tempsSeconde;
     float vitesse_KmH = vitesseMS * 3.6f;
 
@@ -74,6 +73,7 @@ void AffichageDonnees::updateVitesse(float distance) {
     std::string vitesseStr = stream_speed.str();
     this->vitesseText.setString(vitesseStr + " Km/h");
 }
+
 
 void AffichageDonnees::draw(sf::RenderWindow& window) {
     window.draw(this->chronoText);

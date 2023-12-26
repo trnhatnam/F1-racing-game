@@ -2,14 +2,13 @@
 #define CHRONO_DISTANCE_CALCULATOR_H
 
 #include <SFML/Graphics.hpp>
-#include <chrono>
 #include <iomanip>
 #include <sstream>
 #include <iostream>
 
 class AffichageDonnees {
 private:
-    std::chrono::steady_clock::time_point startTime;
+    sf::Clock startTime;
     float initialMapPositionY;
     float distanceParcourue;
     sf::Text chronoText;
