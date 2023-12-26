@@ -23,6 +23,7 @@ public:
     void updateVitesse(float distance);
     void draw(sf::RenderWindow& window);
     void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
+    void drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil);
 };
 
 #endif // CHRONO_DISTANCE_CALCULATOR_H

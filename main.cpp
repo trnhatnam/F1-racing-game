@@ -45,10 +45,11 @@ int main()
     if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
         return -1;
     // création de l'objet voiture
-    Voiture voiture(320, 600, 0, 50, textureVoiture);
+    Voiture voiture(320, 600, 0, 50, 10, 10, textureVoiture);
 
      // initialisation des données de position et d'état
     float vitesse = 0.0f;
+    float carburant = 0.f;
     const float minX = 256.f;
     const float maxX = 576.f;
     bool leftPressed = false;
@@ -77,6 +78,7 @@ int main()
                 voiture.startSpeedUp();
             // initialisation du déplacement
             vitesse = voiture.getSpeed();
+            carburant = voiture.getActualOil();
 
             // demarrage du chronomètre
             affichage.startChrono();
@@ -91,7 +93,9 @@ int main()
 
             jeu.clear();
             vitesse = voiture.getSpeed();
+            carburant = voiture.getActualOil();
             voiture.SpeedUp();
+            voiture.UseOfOil();
             jeu.move(vitesse);
             jeu.checkCollision(voiture);
 
@@ -160,6 +164,7 @@ int main()
         window.draw(jeu);
         window.draw(voiture);
         affichage.drawSpeedometer(window,vitesse,voiture.getMaxSpeed()); // affichage de la jauge de vitesse
+        affichage.drawOilLevelBar(window,carburant,voiture.getMaxOil()); // affichage de la jauge de carburant
         affichage.draw(window); // affichage du chrono, de la distance et de la vitesse
         window.display();
     

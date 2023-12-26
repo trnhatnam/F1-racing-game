@@ -118,3 +118,41 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
     speedBar.setFillColor(barColor);
     window.draw(speedBar);
 }
+
+void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil) {
+        // Positionnement et taille de la jauge
+    float width = 200.f; // Largeur de la jauge
+    float height = 20.f; // Hauteur de la jauge
+    float posX = 20.f;   // Position X de la jauge
+    float posY = 300.f;  // Position Y de la jauge
+
+    // calcule de la proportion actuelle du carburant actuel par rapport au niveau de carburant maximal
+    float OilRatio = actualOil / maxOil;
+    if (OilRatio < 0.0f) OilRatio = 0.0f; // limitation de la jauge avec la valeur à 0 si le carburant est négatif
+
+    // on dessine la forme de la jauge (background)
+    sf::RectangleShape background(sf::Vector2f(width, height));
+    background.setPosition(posX, posY);
+    // on détermine la couleur en fonction de la vitesse actuelle
+    sf::Color barColor;
+    if (OilRatio < 0.4f) {
+        // Pour le niveau bas (inférieures à 40% du niveau maximal)
+        barColor = sf::Color(255, 0, 0); // Rouge
+    } else if (OilRatio < 0.65f) {
+        // Pour les vitesses moyennes (entre 40% et 65% du niveau maximal)
+        barColor = sf::Color(255, 165, 0); // Orange
+    } else if (OilRatio < 0.85f) {
+        // Pour les vitesses moyennes (entre 65% et 85% du niveau maximal)
+        barColor = sf::Color(255, 255, 0); // Jaune
+    } else {
+        // Pour les vitesses élevées (au-dessus de 85% du niveau maximal)
+        barColor = sf::Color(0, 255, 0); // Vert
+    }
+    window.draw(background);
+
+    sf::RectangleShape OilBar(sf::Vector2f(width * OilRatio, height));
+    OilBar.setPosition(posX, posY);
+    // utilisation de la couleur déterminée
+    OilBar.setFillColor(barColor);
+    window.draw(OilBar);
+}
