@@ -4,9 +4,8 @@
 
 class Voiture : public Obstacle{
 private:
-    float _speed;
     float _maxSpeed;
-
+    float _speed;
 public:
     Voiture(float x, float y, float speed, float maxSpeed, const sf::Texture& texture);
 
@@ -14,6 +13,8 @@ public:
     float getX() const;
     float getY() const;
     float getMaxSpeed() const;
+
+    void collision(Obstacle& obs);
 
     void startSpeedUp();
     void SpeedUp();

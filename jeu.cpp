@@ -59,3 +59,9 @@ void Jeu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 float Jeu::getPositionMap1(){
     return map1.getPosition().y;
 }
+
+void Jeu::checkCollision(Voiture &v)
+{
+    for (auto& obs : vect_obstacles)
+        v.collision(obs);
+}

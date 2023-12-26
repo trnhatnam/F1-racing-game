@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "elementDeJeu.hh"
 #include "obstacle.hh"
+#include "voiture.hpp"
 #include <string>
 #include <vector>
 using namespace std;
@@ -15,6 +16,7 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         void spawn_obstacle();
         void spawn_bonus();
         void clear();
+        void checkCollision(Voiture &v);
     
     // fonction de transformation
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -32,6 +34,5 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         TileMap map3;
 
         // les vecteurs d'obstacles et bonus
-        vector<ElementDeJeu> vect_obstacles;
-        vector<ElementDeJeu> vect_bonus; 
+        vector<Obstacle> vect_obstacles;
 };

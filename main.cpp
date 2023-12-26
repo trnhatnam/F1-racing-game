@@ -45,7 +45,7 @@ int main()
     if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
         return -1;
     // création de l'objet voiture
-    Voiture voiture(432.5, 600, 0, 50, textureVoiture);
+    Voiture voiture(320, 600, 0, 50, textureVoiture);
 
      // initialisation des données de position et d'état
     float vitesse = 0.0f;
@@ -83,74 +83,77 @@ int main()
         }
 
         if (enterPressed){
-        if (clock.getElapsedTime().asSeconds() > 1.f)
-        {
-            jeu.spawn_obstacle();
-            clock.restart();
-        }
+            if (clock.getElapsedTime().asSeconds() > 3.f)
+            {
+                jeu.spawn_obstacle();
+                clock.restart();
+            }
 
-        jeu.clear();
-        jeu.move(vitesse);
-        
+            jeu.clear();
+            vitesse = voiture.getSpeed();
+            voiture.SpeedUp();
+            jeu.move(vitesse);
+            jeu.checkCollision(voiture);
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-            if (voiture.getX() > minX){
-                    if (!leftPressed){
-                        // déplacement d'une tuile vers la gauche du véhicule
-                        voiture.move(-64.f,0.f);
-                        // déplacement autorisé
-                        leftPressed = true;
-                        // mise à jour le temps du dernier déplacement
-                        lastMoveTime = std::chrono::steady_clock::now();
-                    }
-            
-            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-                    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
 
-                    // on attend un quart de seconde (0.25 s) avant chaque déplacement
-                    if (duration.count() >= 250) {
-                        if (voiture.getX() > minX) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                if (voiture.getX() > minX){
+                        if (!leftPressed){
                             // déplacement d'une tuile vers la gauche du véhicule
                             voiture.move(-64.f,0.f);
-                            // on met à jour le temps du dernier déplacement
+                            // déplacement autorisé
+                            leftPressed = true;
+                            // mise à jour le temps du dernier déplacement
                             lastMoveTime = std::chrono::steady_clock::now();
                         }
-                    }
-                }
-            } else {
-                // déplacement interdit
-                leftPressed = false;
-            }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-            if (voiture.getX() < maxX){
-                    if (!rightPressed){
-                        // déplacement d'une tuile vers la droite du véhicule
-                        voiture.move(64.f,0.f);
-                        // déplacement autorisé
-                        rightPressed = true;
-                        // mise à jour le temps du dernier déplacement
-                        lastMoveTime = std::chrono::steady_clock::now(); 
-                    }
+                
+                std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                        std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
 
-                    std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-                    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
-
-                    // on attend un quart de seconde (0.25 s) avant chaque déplacement
-                    if (duration.count() >= 250){
-                        // Vérification limite droite
-                        if (voiture.getX() < maxX){
-                            // déplacement d'une tuile vers la droite du véhicule
-                            voiture.move(64.f,0.f);
-                            // on met à jour le temps du dernier déplacement
-                            lastMoveTime = std::chrono::steady_clock::now(); 
+                        // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                        if (duration.count() >= 250) {
+                            if (voiture.getX() > minX) {
+                                // déplacement d'une tuile vers la gauche du véhicule
+                                voiture.move(-64.f,0.f);
+                                // on met à jour le temps du dernier déplacement
+                                lastMoveTime = std::chrono::steady_clock::now();
+                            }
                         }
                     }
+                } else {
+                    // déplacement interdit
+                    leftPressed = false;
                 }
-            } else {
-                // déplacement interdit
-                rightPressed = false;
-        }
-        affichage.updateChronoDistance(jeu.getPositionMap1(), voiture.getSpeed()); // mise à jour des données de chrono, distance et vitesse
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                if (voiture.getX() < maxX){
+                        if (!rightPressed){
+                            // déplacement d'une tuile vers la droite du véhicule
+                            voiture.move(64.f,0.f);
+                            // déplacement autorisé
+                            rightPressed = true;
+                            // mise à jour le temps du dernier déplacement
+                            lastMoveTime = std::chrono::steady_clock::now(); 
+                        }
+
+                        std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                        std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
+
+                        // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                        if (duration.count() >= 250){
+                            // Vérification limite droite
+                            if (voiture.getX() < maxX){
+                                // déplacement d'une tuile vers la droite du véhicule
+                                voiture.move(64.f,0.f);
+                                // on met à jour le temps du dernier déplacement
+                                lastMoveTime = std::chrono::steady_clock::now(); 
+                            }
+                        }
+                    }
+                } else {
+                    // déplacement interdit
+                    rightPressed = false;
+            }
+            affichage.updateChronoDistance(jeu.getPositionMap1(), voiture.getSpeed()); // mise à jour des données de chrono, distance et vitesse
         }
         // on dessine le niveau
         window.clear();
