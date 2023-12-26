@@ -55,3 +55,7 @@ void Jeu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     for (auto obs : vect_obstacles)
         target.draw(obs);
 }
+
+float Jeu::getPositionMap1(){
+    return map1.getPosition().y;
+}

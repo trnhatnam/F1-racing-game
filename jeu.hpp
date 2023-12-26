@@ -7,15 +7,21 @@
 #include <vector>
 using namespace std;
 
-class Jeu: public sf::Drawable, public sf::Transformable
+class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
 {
     public:
+    // lié aux évenments en jeu
         Jeu(int* level);
         void spawn_obstacle();
         void spawn_bonus();
         void clear();
+    
+    // fonction de transformation
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
         void move(float offsetY);
+    
+    // getter
+        float getPositionMap1();
 
     private:
         // pour simuler une map infinie, on crée 3 tilemap et on les fait défiler façon tapis roulant

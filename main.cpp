@@ -1,7 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include "tilemap.hh"
 #include "jeu.hpp"
-#include <stdlib.h>
+#include "voiture.hpp"
+#include "AffichageDonnees.hh"
+#include <chrono>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <time.h>
 
 int main()
@@ -34,20 +40,23 @@ int main()
     // on crée la tilemap avec le niveau précédemment défini
     // pour simuler une tilemap infini, on crée 3 tilemap
     Jeu jeu(level); 
-
-    // sprite
-    sf::Sprite voiture;
+    sf::Clock clock;
     sf::Texture textureVoiture;
     if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
         return -1;
-    voiture.setTexture(textureVoiture);
-    voiture.setPosition(sf::Vector2f(320.f, 600.f));
-    float vitesse = 10.f;
+    // création de l'objet voiture
+    Voiture voiture(432.5, 600, 0, 50, textureVoiture);
 
-    sf::Clock clock;
-    bool tree = true;
-    sf::Texture arbre;
-    
+     // initialisation des données de position et d'état
+    float vitesse = 0.0f;
+    const float minX = 256.f;
+    const float maxX = 576.f;
+    bool leftPressed = false;
+    bool rightPressed = false;
+    bool enterPressed = false;
+    std::chrono::steady_clock::time_point lastMoveTime = std::chrono::steady_clock::now();
+
+    AffichageDonnees affichage;
     // on fait tourner la boucle principale
     while (window.isOpen())
     {
@@ -59,28 +68,98 @@ int main()
                 window.close();
         }
         
-        if (clock.getElapsedTime().asSeconds() > 5.f)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            window.close();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+            enterPressed = true;
+            if (vitesse == 0)
+                // demarrage de la voiture
+                voiture.startSpeedUp();
+            // initialisation du déplacement
+            vitesse = voiture.getSpeed();
+
+            // demarrage du chronomètre
+            affichage.startChrono();
+        }
+
+        if (enterPressed){
+        if (clock.getElapsedTime().asSeconds() > 1.f)
         {
-            jeu.spawn_obstacle(arbre);
+            jeu.spawn_obstacle();
             clock.restart();
         }
 
         jeu.clear();
-        jeu.defiler(vitesse);
+        jeu.move(vitesse);
         
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            voiture.move(-3.f, 0.f);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            voiture.move(3.f, 0.f);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            window.close();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+            if (voiture.getX() > minX){
+                    if (!leftPressed){
+                        // déplacement d'une tuile vers la gauche du véhicule
+                        voiture.move(-64.f,0.f);
+                        // déplacement autorisé
+                        leftPressed = true;
+                        // mise à jour le temps du dernier déplacement
+                        lastMoveTime = std::chrono::steady_clock::now();
+                    }
+            
+            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
 
+                    // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                    if (duration.count() >= 250) {
+                        if (voiture.getX() > minX) {
+                            // déplacement d'une tuile vers la gauche du véhicule
+                            voiture.move(-64.f,0.f);
+                            // on met à jour le temps du dernier déplacement
+                            lastMoveTime = std::chrono::steady_clock::now();
+                        }
+                    }
+                }
+            } else {
+                // déplacement interdit
+                leftPressed = false;
+            }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+            if (voiture.getX() < maxX){
+                    if (!rightPressed){
+                        // déplacement d'une tuile vers la droite du véhicule
+                        voiture.move(64.f,0.f);
+                        // déplacement autorisé
+                        rightPressed = true;
+                        // mise à jour le temps du dernier déplacement
+                        lastMoveTime = std::chrono::steady_clock::now(); 
+                    }
+
+                    std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                    std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
+
+                    // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                    if (duration.count() >= 250){
+                        // Vérification limite droite
+                        if (voiture.getX() < maxX){
+                            // déplacement d'une tuile vers la droite du véhicule
+                            voiture.move(64.f,0.f);
+                            // on met à jour le temps du dernier déplacement
+                            lastMoveTime = std::chrono::steady_clock::now(); 
+                        }
+                    }
+                }
+            } else {
+                // déplacement interdit
+                rightPressed = false;
+        }
+        affichage.updateChronoDistance(jeu.getPositionMap1(), voiture.getSpeed()); // mise à jour des données de chrono, distance et vitesse
+        }
         // on dessine le niveau
         window.clear();
-        jeu.drawIn(window);
+        window.draw(jeu);
         window.draw(voiture);
+        affichage.drawSpeedometer(window,vitesse,voiture.getMaxSpeed()); // affichage de la jauge de vitesse
+        affichage.draw(window); // affichage du chrono, de la distance et de la vitesse
         window.display();
+    
     }
 
     return 0;
