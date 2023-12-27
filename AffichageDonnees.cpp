@@ -120,11 +120,11 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
 }
 
 void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil) {
-        // Positionnement et taille de la jauge
+    // Positionnement et taille de la jauge
     float width = 200.f; // Largeur de la jauge
     float height = 20.f; // Hauteur de la jauge
     float posX = 20.f;   // Position X de la jauge
-    float posY = 300.f;  // Position Y de la jauge
+    float posY = 700.f;  // Position Y de la jauge
 
     // calcule de la proportion actuelle du carburant actuel par rapport au niveau de carburant maximal
     float OilRatio = actualOil / maxOil;
@@ -149,6 +149,17 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil
         barColor = sf::Color(0, 255, 0); // Vert
     }
     window.draw(background);
+
+    sf::Texture TankPicture;
+    if(!TankPicture.loadFromFile("assets/pompe_car.png")){
+        std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
+        EXIT_FAILURE;
+    }
+    sf::Sprite OilTank(TankPicture);
+    float imagPosX = 20.f;
+    float imagPosY = 575.f;
+    OilTank.setPosition(imagPosX,imagPosY);
+    window.draw(OilTank);
 
     sf::RectangleShape OilBar(sf::Vector2f(width * OilRatio, height));
     OilBar.setPosition(posX, posY);
