@@ -85,7 +85,7 @@ int main()
         }
 
         if (enterPressed){
-            if (clock.getElapsedTime().asSeconds() > 3.f)
+            if (clock.getElapsedTime().asSeconds() > 3.f && vitesse > 5)
             {
                 jeu.spawn_obstacle();
                 clock.restart();
