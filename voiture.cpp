@@ -2,8 +2,8 @@
 #include <iostream> 
 #include <cmath>
 
-Voiture::Voiture(float x, float y, float speed, float maxSpeed, float actualOil, float maxOil, const sf::Texture& texture)
-    : _speed(speed), _maxSpeed(maxSpeed), _actualOil(actualOil), _maxOil(maxOil) {
+Voiture::Voiture(float x, float y, float speed, float maxSpeed, float actualOil, float maxOil, float hp, float maxHp, const sf::Texture& texture)
+    : _speed(speed), _maxSpeed(maxSpeed), _actualOil(actualOil), _maxOil(maxOil), _hp(hp), _maxHp(maxHp) {
     // mise en place de la texture
     this->setTexture(texture);
     // positionnement de la voiture
@@ -34,6 +34,14 @@ float Voiture::getActualOil() const {
 
 float Voiture::getMaxOil() const {
     return _maxOil;
+}
+
+float Voiture::getHp() const {
+    return _hp;
+}
+
+float Voiture::getMaxHp() const {
+    return _maxHp;
 }
 
 void Voiture::startSpeedUp() {
@@ -70,6 +78,9 @@ void Voiture::collision(Obstacle& obs)
         obs.getPosition().y < getPosition().y &&
         obs.getPosition().y + 32.f > getPosition().y)
         {
+            _hp--;
+            if (_hp < 0)
+                _hp = 0;
             if (_speed > 5)
                 _speed = sqrt(_speed);
             else

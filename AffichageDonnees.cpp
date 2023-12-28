@@ -14,13 +14,13 @@ AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcour
     this->distanceText.setFont(this->font);
     this->distanceText.setCharacterSize(18);
     this->distanceText.setFillColor(sf::Color::White);
-    this->distanceText.setPosition(416.f, 700.f);
+    this->distanceText.setPosition(416.f, 725.f);
     this->distanceText.setScale(2.f, 2.f);
 
     this->vitesseText.setFont(this->font);
     this->vitesseText.setCharacterSize(24);
     this->vitesseText.setFillColor(sf::Color::Black);
-    this->vitesseText.setPosition(32.f, 150.f);
+    this->vitesseText.setPosition(32.f, 120.f);
     this->vitesseText.setScale(1.5f, 1.5f);
 }
 
@@ -86,7 +86,7 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
     float width = 200.f; // Largeur de la jauge
     float height = 20.f; // Hauteur de la jauge
     float posX = 20.f;   // Position X de la jauge
-    float posY = 200.f;  // Position Y de la jauge
+    float posY = 100.f;  // Position Y de la jauge
 
     // calcule de la proportion actuelle de la vitesse par rapport à la vitesse maximale
     float speedRatio = currentSpeed / maxSpeed;
@@ -124,7 +124,7 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil
     float width = 200.f; // Largeur de la jauge
     float height = 20.f; // Hauteur de la jauge
     float posX = 20.f;   // Position X de la jauge
-    float posY = 700.f;  // Position Y de la jauge
+    float posY = 750.f;  // Position Y de la jauge
 
     // calcule de la proportion actuelle du carburant actuel par rapport au niveau de carburant maximal
     float OilRatio = actualOil / maxOil;
@@ -157,7 +157,7 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil
     }
     sf::Sprite OilTank(TankPicture);
     float imagPosX = 20.f;
-    float imagPosY = 575.f;
+    float imagPosY = 625.f;
     OilTank.setPosition(imagPosX,imagPosY);
     window.draw(OilTank);
 
@@ -166,4 +166,26 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil
     // utilisation de la couleur déterminée
     OilBar.setFillColor(barColor);
     window.draw(OilBar);
+}
+
+void AffichageDonnees::drawHpDot(sf::RenderWindow& window, float numberHp, sf::Sprite HpIconImage) {
+    // on prend les dimensions de la fenêtre
+    sf::Vector2u windowSize = window.getSize();
+
+    // on place les points de vie en haut à droite de la fenetre
+    float iconPosX = windowSize.x - 32.0f;
+    float iconPosY = 20.0f;
+    float iconPosX_2nd = windowSize.x - 64.0f;
+    float iconPosY_2nd = 94.0f;
+
+    HpIconImage.setPosition(iconPosX, iconPosY);
+
+    // Boucle pour dessiner le nombre de points de vie avec l'icône spécifiée et le nombre de points de vie adéquat
+    for (int i = 0; i < numberHp; ++i) {
+        if (i < 3)
+            HpIconImage.setPosition(iconPosX - (i + 1) * (HpIconImage.getGlobalBounds().width + 10.0f), iconPosY);
+        else 
+            HpIconImage.setPosition(iconPosX_2nd - (i - 3 + 1) * ( HpIconImage.getGlobalBounds().width + 10.0f), iconPosY_2nd);
+        window.draw(HpIconImage);
+    }
 }
