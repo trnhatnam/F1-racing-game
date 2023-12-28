@@ -45,9 +45,15 @@ int main()
     if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
         return -1;
     // création de l'objet voiture
-    Voiture voiture(320, 600, 0, 50, 10, 10, textureVoiture);
+    Voiture voiture(320, 600, 0, 50, 10, 10, 5, 5, textureVoiture);
 
-     // initialisation des données de position et d'état
+    // création de l'objet point de vie
+    sf::Texture textureHp;
+    if (!textureHp.loadFromFile("assets/Hp_logo.png", sf::IntRect(0, 0, 64, 64)))
+        return -1;
+    sf::Sprite IconHp(textureHp);
+
+    // initialisation des données de position et d'état
     float vitesse = 0.0f;
     float carburant = 0.f;
     const float minX = 256.f;
@@ -111,7 +117,7 @@ int main()
                             lastMoveTime = std::chrono::steady_clock::now();
                         }
                 
-                std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                        std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
                         std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
 
                         // on attend un quart de seconde (0.25 s) avant chaque déplacement
@@ -163,6 +169,7 @@ int main()
         window.clear();
         window.draw(jeu);
         window.draw(voiture);
+        affichage.drawHpDot(window,voiture.getHp(),IconHp);
         affichage.drawSpeedometer(window,vitesse,voiture.getMaxSpeed()); // affichage de la jauge de vitesse
         affichage.drawOilLevelBar(window,carburant,voiture.getMaxOil()); // affichage de la jauge de carburant
         affichage.draw(window); // affichage du chrono, de la distance et de la vitesse

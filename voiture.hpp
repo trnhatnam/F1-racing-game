@@ -8,8 +8,10 @@ private:
     float _speed;
     float _actualOil;
     float _maxOil;
+    float _hp;
+    float _maxHp;
 public:
-    Voiture(float x, float y, float speed, float maxSpeed, float actualOil, float maxOil, const sf::Texture& texture);
+    Voiture(float x, float y, float speed, float maxSpeed, float actualOil, float maxOil, float hp, float maxHp, const sf::Texture& texture);
 
     float getSpeed() const;
     float getX() const;
@@ -17,6 +19,8 @@ public:
     float getMaxSpeed() const;
     float getActualOil() const;
     float getMaxOil() const;
+    float getHp() const;
+    float getMaxHp() const;
 
     void collision(Obstacle& obs);
 

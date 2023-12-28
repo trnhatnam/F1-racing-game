@@ -54,7 +54,7 @@ int main() {
         return -1;
 
     // création de l'objet voiture
-    Voiture voiture(432.5, 600, 0, 50, 100, 100, textureVoiture);
+    Voiture voiture(432.5, 600, 0, 50, 100, 100, 3, 3, textureVoiture);
 
     // initialisation des données de position et d'état
     float vitesse = 0.0f;
