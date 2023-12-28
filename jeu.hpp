@@ -16,7 +16,7 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         void spawn_obstacle();
         void spawn_bonus();
         void clear();
-        void checkCollision(Voiture &v);
+        bool checkCollision(Voiture &v);
     
     // fonction de transformation
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

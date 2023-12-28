@@ -24,7 +24,7 @@ public:
     void draw(sf::RenderWindow& window);
     void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
     void drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil);
-    void drawHpDot(sf::RenderWindow& window, float numberHp,sf::Sprite HpIconImage);
+    void drawHpDot(sf::RenderWindow& window, float numberHp,sf::Sprite& HpIconImage);
 };
 
 #endif // CHRONO_DISTANCE_CALCULATOR_H

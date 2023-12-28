@@ -63,6 +63,11 @@ int main()
     bool enterPressed = false;
     std::chrono::steady_clock::time_point lastMoveTime = std::chrono::steady_clock::now();
 
+
+    // gestion des collisions
+    bool invincible = false;
+    sf::Clock timer_invicible;
+
     AffichageDonnees affichage;
     // on fait tourner la boucle principale
     while (window.isOpen())
@@ -103,8 +108,15 @@ int main()
             voiture.SpeedUp();
             voiture.UseOfOil();
             jeu.move(vitesse);
-            jeu.checkCollision(voiture);
 
+            // gestion obstacle
+            if (!invincible)
+                if (jeu.checkCollision(voiture)){
+                    invincible = true;
+                    timer_invicible.restart();
+                }
+            if (timer_invicible.getElapsedTime().asSeconds() > 3.f)
+                invincible = false;
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
                 if (voiture.getX() > minX){

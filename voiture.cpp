@@ -72,7 +72,7 @@ void Voiture::UseOfOil() {
     }
 }
 
-void Voiture::collision(Obstacle& obs)
+bool Voiture::collision(Obstacle& obs)
 {
     if (obs.getPosition().x == getPosition().x && 
         obs.getPosition().y < getPosition().y &&
@@ -85,6 +85,7 @@ void Voiture::collision(Obstacle& obs)
                 _speed = sqrt(_speed);
             else
                 _speed = 0;
+            return true;
         }
-        
+    return false;
 }

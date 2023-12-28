@@ -168,7 +168,7 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil
     window.draw(OilBar);
 }
 
-void AffichageDonnees::drawHpDot(sf::RenderWindow& window, float numberHp, sf::Sprite HpIconImage) {
+void AffichageDonnees::drawHpDot(sf::RenderWindow& window, float numberHp, sf::Sprite& HpIconImage) {
     // on prend les dimensions de la fenêtre
     sf::Vector2u windowSize = window.getSize();
 

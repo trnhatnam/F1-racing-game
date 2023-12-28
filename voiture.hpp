@@ -22,7 +22,7 @@ public:
     float getHp() const;
     float getMaxHp() const;
 
-    void collision(Obstacle& obs);
+    bool collision(Obstacle& obs);
 
     void startSpeedUp();
     void SpeedUp();
