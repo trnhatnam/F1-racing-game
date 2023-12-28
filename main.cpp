@@ -184,7 +184,7 @@ int main()
         affichage.drawHpDot(window,voiture.getHp(),IconHp);
         affichage.drawSpeedometer(window,vitesse,voiture.getMaxSpeed()); // affichage de la jauge de vitesse
         affichage.drawOilLevelBar(window,carburant,voiture.getMaxOil()); // affichage de la jauge de carburant
-        affichage.draw(window); // affichage du chrono, de la distance et de la vitesse
+        window.draw(affichage); // affichage du chrono, de la distance et de la vitesse
         window.display();
     
     }

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iostream>
 
-class AffichageDonnees {
+class AffichageDonnees : public sf::Drawable, public sf::Transformable{
 private:
     sf::Clock startTime;
     float initialMapPositionY;
@@ -16,12 +16,32 @@ private:
     sf::Text vitesseText;
     sf::Font font;
 
+    // Positionnement et taille de la jauge
+    inline static float width = 200.f; // Largeur de la jauge
+    inline static float height = 20.f; // Hauteur de la jauge
+    inline static float posX_vit = 20.f;   // Position X de la jauge
+    inline static float posY_vit = 100.f;  // Position Y de la jauge
+
+    // Texture oil tank
+    inline static sf::Texture TankPicture;
+    inline static sf::Sprite OilTank;
+    inline static float imagPosX = 20.f;
+    inline static float imagPosY = 625.f;
+    inline static float posX_oil = 20.f;   // Position X de la jauge oil
+    inline static float posY_oil = 750.f;  // Position Y de la jauge oil
+
+    // on place les points de vie en haut à droite de la fenetre
+    inline static float iconPosX = 928.f;
+    inline static float iconPosY = 20.0f;
+    inline static float iconPosX_2nd = 900.f;
+    inline static float iconPosY_2nd = 94.0f;
+
 public:
     AffichageDonnees();
     void startChrono();
     void updateChronoDistance(float mapPosY, float vitesse);
     void updateVitesse(float distance);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
     void drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil);
     void drawHpDot(sf::RenderWindow& window, float numberHp,sf::Sprite& HpIconImage);

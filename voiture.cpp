@@ -8,8 +8,6 @@ Voiture::Voiture(float x, float y, float speed, float maxSpeed, float actualOil,
     this->setTexture(texture);
     // positionnement de la voiture
     this->setPosition(x, y);
-    // mise a l'echelle du sprite de la voiture
-    //this->setScale(1.5f,1.5f);
 }
 
 float Voiture::getX() const {

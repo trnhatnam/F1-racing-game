@@ -1,27 +1,37 @@
 #include "AffichageDonnees.hh"
 
 AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcourue(0.f) {
-    if (!this->font.loadFromFile("fonts/chrono_pixel/nuvel.ttf")) {
+    if (!font.loadFromFile("fonts/chrono_pixel/nuvel.ttf")) {
         std::cerr << "Erreur pour la police" << std::endl;
     }
 
-    this->chronoText.setFont(this->font);
-    this->chronoText.setCharacterSize(24);
-    this->chronoText.setFillColor(sf::Color::Black);
-    this->chronoText.setPosition(32.f, 10.f);
-    this->chronoText.setScale(2.f, 2.f);
+    chronoText.setFont(font);
+    chronoText.setCharacterSize(24);
+    chronoText.setFillColor(sf::Color::Black);
+    chronoText.setPosition(32.f, 10.f);
+    chronoText.setScale(2.f, 2.f);
 
-    this->distanceText.setFont(this->font);
-    this->distanceText.setCharacterSize(18);
-    this->distanceText.setFillColor(sf::Color::White);
-    this->distanceText.setPosition(416.f, 725.f);
-    this->distanceText.setScale(2.f, 2.f);
+    distanceText.setFont(font);
+    distanceText.setCharacterSize(18);
+    distanceText.setFillColor(sf::Color::White);
+    distanceText.setPosition(416.f, 725.f);
+    distanceText.setScale(2.f, 2.f);
 
-    this->vitesseText.setFont(this->font);
-    this->vitesseText.setCharacterSize(24);
-    this->vitesseText.setFillColor(sf::Color::Black);
-    this->vitesseText.setPosition(32.f, 120.f);
-    this->vitesseText.setScale(1.5f, 1.5f);
+    vitesseText.setFont(font);
+    vitesseText.setCharacterSize(24);
+    vitesseText.setFillColor(sf::Color::Black);
+    vitesseText.setPosition(32.f, 120.f);
+    vitesseText.setScale(1.5f, 1.5f);
+
+    // initialisation des textures pour l'affichage
+    if(!TankPicture.loadFromFile("assets/pompe_car.png")){
+        std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
+        EXIT_FAILURE;
+    }
+
+    // tank
+    OilTank.setTexture(TankPicture);
+    OilTank.setPosition(imagPosX,imagPosY);
 }
 
 void AffichageDonnees::startChrono() {
@@ -29,27 +39,27 @@ void AffichageDonnees::startChrono() {
 }
 
 void AffichageDonnees::updateChronoDistance(float mapPosY, float vitesse) {
-    if (mapPosY > this->initialMapPositionY) {
-        this->distanceParcourue += mapPosY - this->initialMapPositionY;
-        this->initialMapPositionY = mapPosY;
+    if (mapPosY > initialMapPositionY) {
+        distanceParcourue += mapPosY - initialMapPositionY;
+        initialMapPositionY = mapPosY;
     }
-    else if (mapPosY < this->initialMapPositionY) {
-        this->distanceParcourue += this->initialMapPositionY - mapPosY;
-        this->initialMapPositionY = mapPosY;
+    else if (mapPosY < initialMapPositionY) {
+        distanceParcourue += initialMapPositionY - mapPosY;
+        initialMapPositionY = mapPosY;
     }
 
-    float distanceParcourueMetres = this->distanceParcourue / (64.f / 1.5f);
+    float distanceParcourueMetres = distanceParcourue / (64.f / 1.5f);
 
     std::ostringstream stream;
     stream << std::fixed << std::setprecision(2) << distanceParcourueMetres;
     std::string distanceStr = stream.str();
-    this->distanceText.setString(distanceStr + " m");
+    distanceText.setString(distanceStr + " m");
 
-    this->updateVitesse(distanceParcourueMetres);
+    updateVitesse(distanceParcourueMetres);
 }
 
 void AffichageDonnees::updateVitesse(float distance) {
-    sf::Time elapsedTime = this->startTime.getElapsedTime();
+    sf::Time elapsedTime = startTime.getElapsedTime();
 
     int totalSeconds = static_cast<int>(elapsedTime.asMilliseconds() / 1000);
     int minutes = totalSeconds / 60;
@@ -62,7 +72,7 @@ void AffichageDonnees::updateVitesse(float distance) {
     std::string timeStr = minutesStr + " : " +
                         secondsStr + " : " +
                         std::to_string(milliseconds);
-    this->chronoText.setString(timeStr);
+    chronoText.setString(timeStr);
 
     float tempsSeconde = elapsedTime.asSeconds();
     float vitesseMS = distance / tempsSeconde;
@@ -71,30 +81,25 @@ void AffichageDonnees::updateVitesse(float distance) {
     std::ostringstream stream_speed;
     stream_speed << std::fixed << std::setprecision(2) << vitesse_KmH;
     std::string vitesseStr = stream_speed.str();
-    this->vitesseText.setString(vitesseStr + " Km/h");
+    vitesseText.setString(vitesseStr + " Km/h");
 }
 
 
-void AffichageDonnees::draw(sf::RenderWindow& window) {
-    window.draw(this->chronoText);
-    window.draw(this->distanceText);
-    window.draw(this->vitesseText);
+void AffichageDonnees::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+
+    target.draw(chronoText);
+    target.draw(distanceText);
+    target.draw(vitesseText);
 }
 
 void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed) {
-    // Positionnement et taille de la jauge
-    float width = 200.f; // Largeur de la jauge
-    float height = 20.f; // Hauteur de la jauge
-    float posX = 20.f;   // Position X de la jauge
-    float posY = 100.f;  // Position Y de la jauge
-
     // calcule de la proportion actuelle de la vitesse par rapport à la vitesse maximale
     float speedRatio = currentSpeed / maxSpeed;
     if (speedRatio > 1.0f) speedRatio = 1.0f; // limitation de la jauge avec la valeur à 1 si la vitesse dépasse maxSpeed
 
     // on dessine la forme de la jauge (background)
     sf::RectangleShape background(sf::Vector2f(width, height));
-    background.setPosition(posX, posY);
+    background.setPosition(posX_vit, posY_vit);
     // on détermine la couleur en fonction de la vitesse actuelle
     sf::Color barColor;
     if (speedRatio < 0.4f) {
@@ -112,27 +117,22 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
     }
     window.draw(background);
 
+
     sf::RectangleShape speedBar(sf::Vector2f(width * speedRatio, height));
-    speedBar.setPosition(posX, posY);
+    speedBar.setPosition(posX_vit, posY_vit);
     // utilisation de la couleur déterminée
     speedBar.setFillColor(barColor);
     window.draw(speedBar);
 }
 
 void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil) {
-    // Positionnement et taille de la jauge
-    float width = 200.f; // Largeur de la jauge
-    float height = 20.f; // Hauteur de la jauge
-    float posX = 20.f;   // Position X de la jauge
-    float posY = 750.f;  // Position Y de la jauge
-
     // calcule de la proportion actuelle du carburant actuel par rapport au niveau de carburant maximal
     float OilRatio = actualOil / maxOil;
     if (OilRatio < 0.0f) OilRatio = 0.0f; // limitation de la jauge avec la valeur à 0 si le carburant est négatif
 
     // on dessine la forme de la jauge (background)
     sf::RectangleShape background(sf::Vector2f(width, height));
-    background.setPosition(posX, posY);
+    background.setPosition(posX_oil, posY_oil);
     // on détermine la couleur en fonction de la vitesse actuelle
     sf::Color barColor;
     if (OilRatio < 0.4f) {
@@ -150,34 +150,17 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil
     }
     window.draw(background);
 
-    sf::Texture TankPicture;
-    if(!TankPicture.loadFromFile("assets/pompe_car.png")){
-        std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
-        EXIT_FAILURE;
-    }
-    sf::Sprite OilTank(TankPicture);
-    float imagPosX = 20.f;
-    float imagPosY = 625.f;
-    OilTank.setPosition(imagPosX,imagPosY);
+    
     window.draw(OilTank);
 
     sf::RectangleShape OilBar(sf::Vector2f(width * OilRatio, height));
-    OilBar.setPosition(posX, posY);
+    OilBar.setPosition(posX_oil, posY_oil);
     // utilisation de la couleur déterminée
     OilBar.setFillColor(barColor);
     window.draw(OilBar);
 }
 
 void AffichageDonnees::drawHpDot(sf::RenderWindow& window, float numberHp, sf::Sprite& HpIconImage) {
-    // on prend les dimensions de la fenêtre
-    sf::Vector2u windowSize = window.getSize();
-
-    // on place les points de vie en haut à droite de la fenetre
-    float iconPosX = windowSize.x - 32.0f;
-    float iconPosY = 20.0f;
-    float iconPosX_2nd = windowSize.x - 64.0f;
-    float iconPosY_2nd = 94.0f;
-
     HpIconImage.setPosition(iconPosX, iconPosY);
 
     // Boucle pour dessiner le nombre de points de vie avec l'icône spécifiée et le nombre de points de vie adéquat
