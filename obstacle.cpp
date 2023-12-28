@@ -9,7 +9,7 @@ Obstacle::Obstacle()
         }
         if (!texturesObstacles[0].loadFromFile("assets/tree.png", sf::IntRect(0, 0, 64, 64)) ||
             !texturesObstacles[1].loadFromFile("assets/barrier.png", sf::IntRect(0, 0, 64, 64)) ||
-            !texturesObstacles[2].loadFromFile("assets/pompe1.png", sf::IntRect(0, 0, 64, 64)))
+            !texturesObstacles[2].loadFromFile("assets/pompe2.png", sf::IntRect(0, 0, 64, 64)))
             printf("Erreur chargement des textures d'obstacles");
         isTexturesInitialized = true;
     }

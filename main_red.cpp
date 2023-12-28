@@ -168,7 +168,7 @@ int main() {
                 // déplacement interdit
                 rightPressed = false;
             }
-            affichage.updateChronoDistance(map.getPosition().y, voiture.getSpeed()); // mise à jour des données de chrono, distance et vitesse
+            affichage.updateChronoDistance(map.getPosition().y); // mise à jour des données de chrono, distance et vitesse
         }
 
         window.clear();
@@ -178,7 +178,7 @@ int main() {
         window.draw(map3);
         window.draw(voiture);
         affichage.drawSpeedometer(window,vitesse,voiture.getMaxSpeed()); // affichage de la jauge de vitesse
-        affichage.draw(window); // affichage du chrono, de la distance et de la vitesse
+        window.draw(affichage); // affichage du chrono, de la distance et de la vitesse
         window.display();
     }
 

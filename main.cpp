@@ -57,7 +57,7 @@ int main()
     float vitesse = 0.0f;
     float carburant = 0.f;
     const float minX = 256.f;
-    const float maxX = 576.f;
+    const float maxX = 640.f;
     bool leftPressed = false;
     bool rightPressed = false;
     bool enterPressed = false;
@@ -175,7 +175,7 @@ int main()
                     // déplacement interdit
                     rightPressed = false;
             }
-            affichage.updateChronoDistance(jeu.getPositionMap1(), voiture.getSpeed()); // mise à jour des données de chrono, distance et vitesse
+            affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
         }
         // on dessine le niveau
         window.clear();

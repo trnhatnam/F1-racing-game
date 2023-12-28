@@ -23,12 +23,26 @@ AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcour
     vitesseText.setPosition(32.f, 120.f);
     vitesseText.setScale(1.5f, 1.5f);
 
+    vitesseMaxReachedText.setFont(font);
+    vitesseMaxReachedText.setCharacterSize(18);
+    vitesseMaxReachedText.setFillColor(sf::Color::Black);
+    vitesseMaxReachedText.setPosition(800.f,250.f);
+    vitesseMaxReachedText.setScale(1.5f,1.5f);
+
+    if(!SpeedPicture.loadFromFile("assets/max_speed.png")){
+        std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
+        EXIT_FAILURE;
+    }
+    // logo vitesse
+    CompteurSpeed.setTexture(SpeedPicture);
+    CompteurSpeed.setPosition(logoPosX,logoPosY);
+    CompteurSpeed.setScale(1.25f,1.25f);
+
     // initialisation des textures pour l'affichage
     if(!TankPicture.loadFromFile("assets/pompe_car.png")){
         std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
         EXIT_FAILURE;
     }
-
     // tank
     OilTank.setTexture(TankPicture);
     OilTank.setPosition(imagPosX,imagPosY);
@@ -38,14 +52,17 @@ void AffichageDonnees::startChrono() {
     startTime.restart();
 }
 
-void AffichageDonnees::updateChronoDistance(float mapPosY, float vitesse) {
-    if (mapPosY > initialMapPositionY) {
-        distanceParcourue += mapPosY - initialMapPositionY;
-        initialMapPositionY = mapPosY;
+void AffichageDonnees::updateChronoDistance(float mapPosY) {
+    static sf::Clock clock;
+    static float lastMapPosY = mapPosY;
+
+    if (mapPosY > lastMapPosY) {
+        distanceParcourue += mapPosY - lastMapPosY;
+        lastMapPosY = mapPosY;
     }
-    else if (mapPosY < initialMapPositionY) {
-        distanceParcourue += initialMapPositionY - mapPosY;
-        initialMapPositionY = mapPosY;
+    else if (mapPosY < lastMapPosY) {
+        distanceParcourue += lastMapPosY - mapPosY;
+        lastMapPosY = mapPosY;
     }
 
     float distanceParcourueMetres = distanceParcourue / (64.f / 1.5f);
@@ -55,11 +72,7 @@ void AffichageDonnees::updateChronoDistance(float mapPosY, float vitesse) {
     std::string distanceStr = stream.str();
     distanceText.setString(distanceStr + " m");
 
-    updateVitesse(distanceParcourueMetres);
-}
-
-void AffichageDonnees::updateVitesse(float distance) {
-    sf::Time elapsedTime = startTime.getElapsedTime();
+    sf::Time elapsedTime = clock.getElapsedTime();
 
     int totalSeconds = static_cast<int>(elapsedTime.asMilliseconds() / 1000);
     int minutes = totalSeconds / 60;
@@ -74,14 +87,40 @@ void AffichageDonnees::updateVitesse(float distance) {
                         std::to_string(milliseconds);
     chronoText.setString(timeStr);
 
-    float tempsSeconde = elapsedTime.asSeconds();
-    float vitesseMS = distance / tempsSeconde;
-    float vitesse_KmH = vitesseMS * 3.6f;
+    updateVitesse(distanceParcourueMetres);
+}
 
-    std::ostringstream stream_speed;
-    stream_speed << std::fixed << std::setprecision(2) << vitesse_KmH;
-    std::string vitesseStr = stream_speed.str();
-    vitesseText.setString(vitesseStr + " Km/h");
+void AffichageDonnees::updateVitesse(float distance) {
+    static sf::Clock speedUpdateClock;
+    static float lastDistance = distance;
+    static float vitesseMaxReached = 0.0;
+
+    sf::Time elapsedTime = speedUpdateClock.getElapsedTime();
+
+    if (elapsedTime.asMilliseconds() >= 25) {
+
+        float distanceDiff = distance - lastDistance;
+
+        float vitesseMS = distanceDiff / elapsedTime.asSeconds();
+        float vitesse_KmH = vitesseMS * 3.6f;
+        lastDistance = distance;
+        speedUpdateClock.restart();
+
+        if (vitesse_KmH > 750)
+            vitesse_KmH = 0.0;
+
+        std::ostringstream stream_speed;
+        stream_speed << std::fixed << std::setprecision(1) << vitesse_KmH;
+        std::string vitesseStr = stream_speed.str();
+        vitesseText.setString(vitesseStr + " Km/h");
+
+        if(vitesse_KmH > vitesseMaxReached)
+            vitesseMaxReached = vitesse_KmH;
+        std::ostringstream max_speed_reach;
+        max_speed_reach << std::fixed << std::setprecision(1) << vitesseMaxReached;
+        std::string vitesseMaxStr = max_speed_reach.str();
+        vitesseMaxReachedText.setString(vitesseMaxStr + " Km/h");
+    }
 }
 
 
@@ -90,6 +129,7 @@ void AffichageDonnees::draw(sf::RenderTarget& target, sf::RenderStates states) c
     target.draw(chronoText);
     target.draw(distanceText);
     target.draw(vitesseText);
+    target.draw(vitesseMaxReachedText);
 }
 
 void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed) {
@@ -117,6 +157,7 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
     }
     window.draw(background);
 
+    window.draw(CompteurSpeed);
 
     sf::RectangleShape speedBar(sf::Vector2f(width * speedRatio, height));
     speedBar.setPosition(posX_vit, posY_vit);

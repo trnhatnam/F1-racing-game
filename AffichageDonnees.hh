@@ -14,6 +14,7 @@ private:
     sf::Text chronoText;
     sf::Text distanceText;
     sf::Text vitesseText;
+    sf::Text vitesseMaxReachedText;
     sf::Font font;
 
     // Positionnement et taille de la jauge
@@ -21,6 +22,12 @@ private:
     inline static float height = 20.f; // Hauteur de la jauge
     inline static float posX_vit = 20.f;   // Position X de la jauge
     inline static float posY_vit = 100.f;  // Position Y de la jauge
+
+    // Texture logo max speed
+    inline static sf::Texture SpeedPicture;
+    inline static sf::Sprite CompteurSpeed;
+    inline static float logoPosX = 880.f;
+    inline static float logoPosY = 180.f;
 
     // Texture oil tank
     inline static sf::Texture TankPicture;
@@ -39,7 +46,7 @@ private:
 public:
     AffichageDonnees();
     void startChrono();
-    void updateChronoDistance(float mapPosY, float vitesse);
+    void updateChronoDistance(float mapPosY);
     void updateVitesse(float distance);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
