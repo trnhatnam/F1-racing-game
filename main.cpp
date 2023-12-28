@@ -45,7 +45,7 @@ int main()
     if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
         return -1;
     // création de l'objet voiture
-    Voiture voiture(320, 600, 0, 50, 10, 10, 5, 5, textureVoiture);
+    Voiture voiture(320, 600, 0, 50, 20, 20, 5, 5, textureVoiture);
 
     // création de l'objet point de vie
     sf::Texture textureHp;
