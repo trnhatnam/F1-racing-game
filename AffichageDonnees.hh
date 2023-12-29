@@ -50,7 +50,7 @@ public:
     void updateVitesse(float distance);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
-    void drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil);
+    void drawOilLevelBar(sf::RenderWindow& window, float currentOil, float maxOil);
     void drawHpDot(sf::RenderWindow& window, float numberHp,sf::Sprite& HpIconImage);
 };
 

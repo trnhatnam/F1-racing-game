@@ -7,7 +7,6 @@ class Obstacle: public ElementDeJeu{
     public:
         Obstacle();
     private:
-        inline static bool isTexturesInitialized;
-        inline static vector<sf::Texture> texturesObstacles;
-        
+        inline static bool areTexturesInitialized;
+        inline static vector<sf::Texture> textures;
 };

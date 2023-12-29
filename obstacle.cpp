@@ -2,18 +2,16 @@
 
 Obstacle::Obstacle()
 {
-    if (!isTexturesInitialized)
+    if (!areTexturesInitialized)
     {
         for (int i=0; i<3; i++){
-            texturesObstacles.push_back(sf::Texture());
+            textures.push_back(sf::Texture());
         }
-        if (!texturesObstacles[0].loadFromFile("assets/tree.png", sf::IntRect(0, 0, 64, 64)) ||
-            !texturesObstacles[1].loadFromFile("assets/barrier.png", sf::IntRect(0, 0, 64, 64)) ||
-            !texturesObstacles[2].loadFromFile("assets/pompe2.png", sf::IntRect(0, 0, 64, 64)))
-            printf("Erreur chargement des textures d'obstacles");
-        isTexturesInitialized = true;
+        if (!textures[0].loadFromFile("assets/tree.png", sf::IntRect(0, 0, 64, 64)) ||
+            !textures[1].loadFromFile("assets/barrier.png", sf::IntRect(0, 0, 64, 64)) ||
+            !textures[2].loadFromFile("assets/pompe2.png", sf::IntRect(0, 0, 64, 64)))
+            std::cout << "Erreur chargement des textures d'obstacles" << std::endl;
+        areTexturesInitialized = true;
     }
-    setTexture(texturesObstacles[rand() % 3]);
-    vitesseRelative = 0;
-    // initialiser résistance et tout aléatoirement pour que ça soit plus fun
+    setTexture(textures[rand() % 3]);
 }

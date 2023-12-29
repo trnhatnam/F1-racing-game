@@ -166,9 +166,9 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
     window.draw(speedBar);
 }
 
-void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float actualOil, float maxOil) {
+void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float currentOil, float maxOil) {
     // calcule de la proportion actuelle du carburant actuel par rapport au niveau de carburant maximal
-    float OilRatio = actualOil / maxOil;
+    float OilRatio = currentOil / maxOil;
     if (OilRatio < 0.0f) OilRatio = 0.0f; // limitation de la jauge avec la valeur à 0 si le carburant est négatif
 
     // on dessine la forme de la jauge (background)

@@ -40,12 +40,12 @@ int main()
     // on crée la tilemap avec le niveau précédemment défini
     // pour simuler une tilemap infini, on crée 3 tilemap
     Jeu jeu(level); 
-    sf::Clock clock;
+
+    // création de l'objet voiture
     sf::Texture textureVoiture;
     if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
         return -1;
-    // création de l'objet voiture
-    Voiture voiture(320, 600, 0, 50, 20, 20, 5, 5, textureVoiture);
+    Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3, textureVoiture);
 
     // création de l'objet point de vie
     sf::Texture textureHp;
@@ -66,7 +66,11 @@ int main()
 
     // gestion des collisions
     bool invincible = false;
+    bool inbuffable = false;
     sf::Clock timer_invicible;
+    sf::Clock timer_nonbuffable;
+    sf::Clock clockObs;
+    sf::Clock clockBon;
 
     AffichageDonnees affichage;
     // on fait tourner la boucle principale
@@ -89,34 +93,52 @@ int main()
                 voiture.startSpeedUp();
             // initialisation du déplacement
             vitesse = voiture.getSpeed();
-            carburant = voiture.getActualOil();
+            carburant = voiture.getcurrentOil();
 
             // demarrage du chronomètre
             affichage.startChrono();
         }
 
         if (enterPressed){
-            if (clock.getElapsedTime().asSeconds() > 3.f && vitesse > 5)
+            if (vitesse > 2)
             {
-                jeu.spawn_obstacle();
-                clock.restart();
+                if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
+                {
+                    jeu.spawn_obstacle();
+                    clockObs.restart();
+                }
+                if (clockBon.getElapsedTime().asSeconds() > 1/vitesse + 4.f)
+                {
+                    
+                    jeu.spawn_bonus();
+                    clockBon.restart();
+                }
             }
-
+    
             jeu.clear();
             vitesse = voiture.getSpeed();
-            carburant = voiture.getActualOil();
+            carburant = voiture.getcurrentOil();
             voiture.SpeedUp();
             voiture.UseOfOil();
             jeu.move(vitesse);
 
             // gestion obstacle
             if (!invincible)
-                if (jeu.checkCollision(voiture)){
+                if (jeu.checkCollisionObs(voiture)){
                     invincible = true;
                     timer_invicible.restart();
                 }
             if (timer_invicible.getElapsedTime().asSeconds() > 3.f)
                 invincible = false;
+
+            // gestion bonus
+            if (!inbuffable)
+                if (jeu.checkCollisionBonus(voiture)){
+                    inbuffable = true;
+                    timer_nonbuffable.restart();
+                }
+            if (timer_nonbuffable.getElapsedTime().asSeconds() > 1.f)
+                inbuffable = false;
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
                 if (voiture.getX() > minX){

@@ -2,8 +2,8 @@
 #include <iostream> 
 #include <cmath>
 
-Voiture::Voiture(float x, float y, float speed, float maxSpeed, float actualOil, float maxOil, float hp, float maxHp, const sf::Texture& texture)
-    : _speed(speed), _maxSpeed(maxSpeed), _actualOil(actualOil), _maxOil(maxOil), _hp(hp), _maxHp(maxHp) {
+Voiture::Voiture(float x, float y, float speed, float maxSpeed, float currentOil, float maxOil, float hp, float maxHp, const sf::Texture& texture)
+    : _speed(speed), _maxSpeed(maxSpeed), _currentOil(currentOil), _maxOil(maxOil), _hp(hp), _maxHp(maxHp) {
     // mise en place de la texture
     this->setTexture(texture);
     // positionnement de la voiture
@@ -26,8 +26,8 @@ float Voiture::getMaxSpeed() const {
     return _maxSpeed;
 }
 
-float Voiture::getActualOil() const {
-    return _actualOil;
+float Voiture::getcurrentOil() const {
+    return _currentOil;
 }
 
 float Voiture::getMaxOil() const {
@@ -47,11 +47,11 @@ void Voiture::startSpeedUp() {
 }
 
 void Voiture::SpeedUp() {
-    if (_actualOil > 0.0){
+    if (_currentOil > 0.0){
         _speed += 0.01;
         if (_speed > _maxSpeed)
             _speed = _maxSpeed;
-    } else {
+    } else { // perte de vitese due au manque de carburant
         _speed -= 0.01*sqrt(_speed*0.5);
         if (_speed < 0.0001)
             _speed = 0.0;
@@ -60,18 +60,19 @@ void Voiture::SpeedUp() {
 
 void Voiture::UseOfOil() {
     if (_speed == 0.0) {
-        _actualOil -= 0.5;
+        _currentOil -= 0.5;
     } else {
-        float consumptionRate = 0.01 * sqrt(_speed);
-        _actualOil -= consumptionRate;
+        float consumptionRate = 0.001 * sqrt(_speed);
+        _currentOil -= consumptionRate;
     }
-    if (_actualOil < 0.0) {
-        _actualOil = 0.0;
+    if (_currentOil < 0.0) {
+        _currentOil = 0.0;
     }
 }
 
 bool Voiture::collision(Obstacle& obs)
 {
+    // La voiture collide avec un obstacle
     if (obs.getPosition().x == getPosition().x && 
         obs.getPosition().y < getPosition().y &&
         obs.getPosition().y + 32.f > getPosition().y)
@@ -84,6 +85,25 @@ bool Voiture::collision(Obstacle& obs)
             else
                 _speed = 0;
             return true;
+        }
+    return false;
+}
+
+bool Voiture::collision(Bonus& bon)
+{
+    // La voiture collide avec un bonus
+    if (bon.getPosition().x == getPosition().x && 
+        bon.getPosition().y < getPosition().y &&
+        bon.getPosition().y + 32.f > getPosition().y)
+        {
+            std::string typeBonus = bon.getTypeBonus();
+            float valeur = bon.getValue();
+            if (typeBonus == "life" && _hp < _maxHp)
+                _hp += valeur;
+            if (typeBonus == "oil")
+                _currentOil += (_currentOil + valeur >= _maxOil) ? (_maxOil - _currentOil) : valeur;
+            if (typeBonus == "boost")
+                _speed += (_speed + valeur >= _maxSpeed) ? (_maxSpeed - _speed) : valeur;
         }
     return false;
 }

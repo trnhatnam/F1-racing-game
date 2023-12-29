@@ -4,6 +4,7 @@
 #include "elementDeJeu.hh"
 #include "obstacle.hh"
 #include "voiture.hpp"
+#include "bonus.hh"
 #include <string>
 #include <vector>
 using namespace std;
@@ -16,7 +17,8 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         void spawn_obstacle();
         void spawn_bonus();
         void clear();
-        bool checkCollision(Voiture &v);
+        bool checkCollisionObs(Voiture &v);
+        bool checkCollisionBonus(Voiture &v);
     
     // fonction de transformation
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -35,4 +37,5 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
 
         // les vecteurs d'obstacles et bonus
         vector<Obstacle> vect_obstacles;
+        vector<Bonus> vect_bonus;
 };
