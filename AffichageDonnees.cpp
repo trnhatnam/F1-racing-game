@@ -216,7 +216,7 @@ void AffichageDonnees::drawHpDot(sf::RenderWindow& window) {
         window.draw(HpIcon);
     }
 }
-/*
+
 void AffichageDonnees::gameOverNotice(sf::RenderWindow& window){
     centralText.setFont(font);
     centralText.setString("Game over");
@@ -226,4 +226,3 @@ void AffichageDonnees::gameOverNotice(sf::RenderWindow& window){
     window.draw(centralText);  
 }
 
-*/

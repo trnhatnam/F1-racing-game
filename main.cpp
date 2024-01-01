@@ -121,8 +121,9 @@ int main()
             // demarrage du chronomètre
             affichage.startChrono();
         }
-
-        else { if (enterPressed){
+        }
+        else { 
+        if (enterPressed){
             if (vitesse > 2)
             {
                 if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
@@ -142,7 +143,7 @@ int main()
             vitesse = voiture.getSpeed();
             carburant = voiture.getfuel();
             voiture.speedUp();
-            voiture.getfuel();
+            voiture.useFuel();
             jeu.move(vitesse);
 
                 // gestion obstacle
@@ -221,7 +222,8 @@ int main()
                     rightPressed = false;
             }
             affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
-        }}
+        }
+        }
         // on dessine le niveau
         window.clear();
         window.draw(jeu);
@@ -233,17 +235,17 @@ int main()
         affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
         
 
-        /* game over
+ 
         if (voiture.getHp() == 0 || (vitesse < 1 && vitesse > 0.001))
         {
             enterPressed = false;
             affichage.gameOverNotice(window);
         }
-        */
+
         feu.draw(window);
         window.display();
+        }
     
-    }
 
     return 0;
 }
