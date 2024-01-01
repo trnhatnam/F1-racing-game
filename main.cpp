@@ -4,6 +4,7 @@
 #include "voiture.hpp"
 #include "AffichageDonnees.hh"
 #include "FeuDepart.hh"
+#include "FeuDepart.hh"
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -121,7 +122,7 @@ int main()
             affichage.startChrono();
         }
 
-        else if (enterPressed){
+        else { if (enterPressed){
             if (vitesse > 2)
             {
                 if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
@@ -141,7 +142,7 @@ int main()
             vitesse = voiture.getSpeed();
             carburant = voiture.getfuel();
             voiture.speedUp();
-            voiture.useFuel();
+            voiture.getfuel();
             jeu.move(vitesse);
 
                 // gestion obstacle
@@ -204,27 +205,23 @@ int main()
                             std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
                             std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
 
-                            // on attend un quart de seconde (0.25 s) avant chaque déplacement
-                            if (duration.count() >= 250){
-                                // Vérification limite droite
-                                if (voiture.getX() < maxX){
-                                    // déplacement d'une tuile vers la droite du véhicule
-                                    voiture.move(64.f,0.f);
-                                    // on met à jour le temps du dernier déplacement
-                                    lastMoveTime = std::chrono::steady_clock::now(); 
-                                }
+                        // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                        if (duration.count() >= 250){
+                            // Vérification limite droite
+                            if (voiture.getX() < maxX){
+                                // déplacement d'une tuile vers la droite du véhicule
+                                voiture.move(64.f,0.f);
+                                // on met à jour le temps du dernier déplacement
+                                lastMoveTime = std::chrono::steady_clock::now(); 
                             }
                         }
-                    } else {
-                        // déplacement interdit
-                        rightPressed = false;
-                }
-                affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
+                    }
+                } else {
+                    // déplacement interdit
+                    rightPressed = false;
             }
-        }
-
-        
-
+            affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
+        }}
         // on dessine le niveau
         window.clear();
         window.draw(jeu);
