@@ -4,7 +4,6 @@
 #include "voiture.hpp"
 #include "AffichageDonnees.hh"
 #include "FeuDepart.hh"
-#include "FeuDepart.hh"
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -71,6 +70,12 @@ int main()
     sf::Clock fauxDepartClock; // Chronomètre pour le faux départ
     bool enteringRace = false; // Indique si le joueur a appuyé sur Enter pour démarrer la course
 
+    sf::Clock reactedTime; // Chronomètre de temps de réaction
+    reactedTime.restart();
+    float first_time = 0.0;
+    float second_time = 0.0;
+    int firstLoop = 0;
+
     // on fait tourner la boucle principale
     while (window.isOpen())
     {
@@ -81,7 +86,7 @@ int main()
             if(event.type == sf::Event::Closed)
                 window.close();
         }
-        
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
 
@@ -106,9 +111,14 @@ int main()
             feu.showFeuSprite();
             feu.updateFeuDepart();
         }
+        if(feu.isReady() && firstLoop == 0){
+            first_time = reactedTime.getElapsedTime().asSeconds();
+            firstLoop++;
+        }
 
         if (!enteringRace) {
             if (feu.isReady() && feu.getCurrentState() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+                second_time = reactedTime.getElapsedTime().asSeconds();
                 enterPressed = true;
                 enteringRace = true;
                 if (vitesse == 0)
@@ -118,12 +128,13 @@ int main()
                 vitesse = voiture.getSpeed();
                 carburant = voiture.getfuel();
 
-            // demarrage du chronomètre
-            affichage.startChrono();
-        }
+                // demarrage du chronomètre
+                affichage.startChrono();
+            }
         }
         else { 
         if (enterPressed){
+            feu.hideFeuSprite();
             if (vitesse > 2)
             {
                 if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
@@ -233,11 +244,14 @@ int main()
         affichage.drawHpDot(window);
         affichage.drawSpeedometer(window); // affichage de la jauge de vitesse
         affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
+        if(enteringRace)
+            affichage.ReactedTime(window,first_time,second_time);
         
 
  
         if (voiture.getHp() == 0 || (vitesse < 1 && vitesse > 0.001))
         {
+            feu.hideFeuSprite();
             enterPressed = false;
             affichage.gameOverNotice(window);
         }

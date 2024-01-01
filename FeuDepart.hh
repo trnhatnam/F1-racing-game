@@ -4,8 +4,8 @@
 class FeuDepart{
 private:
     int currentState; // État actuel du feu de départ
-    sf::Texture feuTextureFoul;
-    sf::Sprite FoulSprite;
+    sf::Texture feuTextureFoul; // Texture pour afficher l'image du feu de faux départ
+    sf::Sprite FoulSprite; // Sprite pour afficher la texture du faux départ
     sf::Texture feuTextures[6]; // Tableau de textures pour les différentes images du feu de départ
     sf::Sprite feuSprite; // Sprite pour afficher les différentes textures
     bool readyToStart; // Booléen pour indiquer si le jeu peut être démarré

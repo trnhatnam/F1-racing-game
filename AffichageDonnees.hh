@@ -14,6 +14,7 @@ private:
     sf::Text distanceText;
     sf::Text vitesseText;
     sf::Text vitesseMaxReachedText;
+    sf::Text tempsReaction;
     sf::Text centralText;
     sf::Font font;
     Voiture& voitureTrack;
@@ -46,6 +47,12 @@ private:
     inline static sf::Sprite HpIcon;
     inline static sf::Texture HpTexture;
 
+    // on place le temps de réaction au milieu à gauche
+    inline static float feuPosX = 20.f;
+    inline static float feuPosY = 180.f;
+    inline static sf::Sprite FeuSprite;
+    inline static sf::Texture FeuTexture;
+
 public:
     AffichageDonnees(Voiture &v);
     void startChrono();
@@ -55,6 +62,7 @@ public:
     void drawSpeedometer(sf::RenderWindow& target);
     void drawOilLevelBar(sf::RenderWindow& target);
     void drawHpDot(sf::RenderWindow& target);
+    void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed);
     void gameOverNotice(sf::RenderWindow& window);
     void checkpointNotice(sf::RenderWindow& window);
 };

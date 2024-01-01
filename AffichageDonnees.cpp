@@ -29,6 +29,12 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
     vitesseMaxReachedText.setPosition(800.f,250.f);
     vitesseMaxReachedText.setScale(1.5f,1.5f);
 
+    tempsReaction.setFont(font);
+    tempsReaction.setCharacterSize(18);
+    tempsReaction.setFillColor(sf::Color::Black);
+    tempsReaction.setPosition(20.f,230.f);
+    tempsReaction.setScale(1.5f,1.5f);
+
     if(!SpeedPicture.loadFromFile("assets/max_speed.png")){
         std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
         EXIT_FAILURE;
@@ -51,8 +57,17 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
     if(!HpTexture.loadFromFile("assets/Hp_logo.png", sf::IntRect(0, 0, 64, 64))){
         std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
         EXIT_FAILURE;
-    };
+    }
     HpIcon.setTexture(HpTexture);
+
+    // Feu de départ
+    if(!FeuTexture.loadFromFile("assets/f1_feu_dep_tmp_rec.png")){
+        std::cerr << "Erreur lors du chargement de l'image du feu" << std::endl;
+        EXIT_FAILURE;
+    }
+    FeuSprite.setTexture(FeuTexture);
+    FeuSprite.setPosition(feuPosX,feuPosY);
+    FeuSprite.setScale(0.35f,0.35f);
 }
 
 void AffichageDonnees::startChrono() {
@@ -137,6 +152,7 @@ void AffichageDonnees::draw(sf::RenderTarget& target, sf::RenderStates states) c
     target.draw(distanceText);
     target.draw(vitesseText);
     target.draw(vitesseMaxReachedText);
+    target.draw(tempsReaction);
 }
 
 void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window) {
@@ -220,9 +236,19 @@ void AffichageDonnees::drawHpDot(sf::RenderWindow& window) {
 void AffichageDonnees::gameOverNotice(sf::RenderWindow& window){
     centralText.setFont(font);
     centralText.setString("Game over");
-    centralText.setPosition(360.f, 360.f);
+    centralText.setPosition(416.f, 360.f);
     centralText.setCharacterSize(24);
     centralText.setFillColor(sf::Color::White);
     window.draw(centralText);  
 }
 
+void AffichageDonnees::ReactedTime(sf::RenderWindow& window, float first_time, float second_time){
+    float elapsedTimeReact = second_time - first_time;
+
+    window.draw(FeuSprite);
+
+    std::ostringstream TempsReact;
+    TempsReact << std::fixed << std::setprecision(3) << elapsedTimeReact << " s";
+    std::string TempsStr = TempsReact.str();
+    tempsReaction.setString(TempsStr);
+}
