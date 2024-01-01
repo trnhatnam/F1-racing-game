@@ -1,6 +1,6 @@
 #include "AffichageDonnees.hh"
 
-AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcourue(0.f) {
+AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), distanceParcourue(0.f), voitureTrack(v) {
     if (!font.loadFromFile("fonts/chrono_pixel/nuvel.ttf")) {
         std::cerr << "Erreur pour la police" << std::endl;
     }
@@ -33,7 +33,7 @@ AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcour
         std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
         EXIT_FAILURE;
     }
-    // logo vitesse
+    // Logo vitesse
     CompteurSpeed.setTexture(SpeedPicture);
     CompteurSpeed.setPosition(logoPosX,logoPosY);
     CompteurSpeed.setScale(1.25f,1.25f);
@@ -43,9 +43,16 @@ AffichageDonnees::AffichageDonnees() : initialMapPositionY(0.f), distanceParcour
         std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
         EXIT_FAILURE;
     }
-    // tank
+    // Oil tank texture
     OilTank.setTexture(TankPicture);
     OilTank.setPosition(imagPosX,imagPosY);
+
+    // Points de vie
+    if(!HpTexture.loadFromFile("assets/Hp_logo.png", sf::IntRect(0, 0, 64, 64))){
+        std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
+        EXIT_FAILURE;
+    };
+    HpIcon.setTexture(HpTexture);
 }
 
 void AffichageDonnees::startChrono() {
@@ -132,9 +139,9 @@ void AffichageDonnees::draw(sf::RenderTarget& target, sf::RenderStates states) c
     target.draw(vitesseMaxReachedText);
 }
 
-void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed) {
+void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window) {
     // calcule de la proportion actuelle de la vitesse par rapport à la vitesse maximale
-    float speedRatio = currentSpeed / maxSpeed;
+    float speedRatio = voitureTrack.getSpeed() / voitureTrack.getMaxSpeed();
     if (speedRatio > 1.0f) speedRatio = 1.0f; // limitation de la jauge avec la valeur à 1 si la vitesse dépasse maxSpeed
 
     // on dessine la forme de la jauge (background)
@@ -156,7 +163,6 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
         barColor = sf::Color(255, 0, 0); // Rouge
     }
     window.draw(background);
-
     window.draw(CompteurSpeed);
 
     sf::RectangleShape speedBar(sf::Vector2f(width * speedRatio, height));
@@ -166,9 +172,9 @@ void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window, float currentSp
     window.draw(speedBar);
 }
 
-void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float currentOil, float maxOil) {
+void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window) {
     // calcule de la proportion actuelle du carburant actuel par rapport au niveau de carburant maximal
-    float OilRatio = currentOil / maxOil;
+    float OilRatio = voitureTrack.getfuel() / voitureTrack.getMaxFuel();
     if (OilRatio < 0.0f) OilRatio = 0.0f; // limitation de la jauge avec la valeur à 0 si le carburant est négatif
 
     // on dessine la forme de la jauge (background)
@@ -191,9 +197,8 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float currentOi
     }
     window.draw(background);
 
-    
+    // -----
     window.draw(OilTank);
-
     sf::RectangleShape OilBar(sf::Vector2f(width * OilRatio, height));
     OilBar.setPosition(posX_oil, posY_oil);
     // utilisation de la couleur déterminée
@@ -201,15 +206,24 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window, float currentOi
     window.draw(OilBar);
 }
 
-void AffichageDonnees::drawHpDot(sf::RenderWindow& window, float numberHp, sf::Sprite& HpIconImage) {
-    HpIconImage.setPosition(iconPosX, iconPosY);
-
+void AffichageDonnees::drawHpDot(sf::RenderWindow& window) {
     // Boucle pour dessiner le nombre de points de vie avec l'icône spécifiée et le nombre de points de vie adéquat
-    for (int i = 0; i < numberHp; ++i) {
+    for (int i = 0; i < voitureTrack.getHp(); ++i) {
         if (i < 3)
-            HpIconImage.setPosition(iconPosX - (i + 1) * (HpIconImage.getGlobalBounds().width + 10.0f), iconPosY);
+            HpIcon.setPosition(iconPosX - (i + 1) * (HpIcon.getGlobalBounds().width + 10.0f), iconPosY);
         else 
-            HpIconImage.setPosition(iconPosX_2nd - (i - 3 + 1) * ( HpIconImage.getGlobalBounds().width + 10.0f), iconPosY_2nd);
-        window.draw(HpIconImage);
+            HpIcon.setPosition(iconPosX_2nd - (i - 3 + 1) * (HpIcon.getGlobalBounds().width + 10.0f), iconPosY_2nd);
+        window.draw(HpIcon);
     }
 }
+/*
+void AffichageDonnees::gameOverNotice(sf::RenderWindow& window){
+    centralText.setFont(font);
+    centralText.setString("Game over");
+    centralText.setPosition(360.f, 360.f);
+    centralText.setCharacterSize(24);
+    centralText.setFillColor(sf::Color::White);
+    window.draw(centralText);  
+}
+
+*/

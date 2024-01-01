@@ -3,6 +3,7 @@
 #include "jeu.hpp"
 #include "voiture.hpp"
 #include "AffichageDonnees.hh"
+#include "FeuDepart.hh"
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -16,7 +17,7 @@ int main()
     srand(time(NULL));
     sf::RenderWindow window(sf::VideoMode(960, 960), "Tilemap");
     window.setFramerateLimit(60);
-    window.setVerticalSyncEnabled(false);
+    window.setVerticalSyncEnabled(true);
     // on définit le niveau à l'aide de numéro de tuiles
     int level[] =
     {
@@ -42,16 +43,7 @@ int main()
     Jeu jeu(level); 
 
     // création de l'objet voiture
-    sf::Texture textureVoiture;
-    if (!textureVoiture.loadFromFile("assets/voiture.png", sf::IntRect(0, 0, 64, 64)))
-        return -1;
-    Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3, textureVoiture);
-
-    // création de l'objet point de vie
-    sf::Texture textureHp;
-    if (!textureHp.loadFromFile("assets/Hp_logo.png", sf::IntRect(0, 0, 64, 64)))
-        return -1;
-    sf::Sprite IconHp(textureHp);
+    Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3);
 
     // initialisation des données de position et d'état
     float vitesse = 0.0f;
@@ -63,7 +55,6 @@ int main()
     bool enterPressed = false;
     std::chrono::steady_clock::time_point lastMoveTime = std::chrono::steady_clock::now();
 
-
     // gestion des collisions
     bool invincible = false;
     bool inbuffable = false;
@@ -72,7 +63,13 @@ int main()
     sf::Clock clockObs;
     sf::Clock clockBon;
 
-    AffichageDonnees affichage;
+    AffichageDonnees affichage(voiture);
+    FeuDepart feu;
+
+    bool fauxDepart = false; // Indicateur pour le faux départ
+    sf::Clock fauxDepartClock; // Chronomètre pour le faux départ
+    bool enteringRace = false; // Indique si le joueur a appuyé sur Enter pour démarrer la course
+
     // on fait tourner la boucle principale
     while (window.isOpen())
     {
@@ -86,20 +83,45 @@ int main()
         
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
-            enterPressed = true;
-            if (vitesse == 0)
-                // demarrage de la voiture
-                voiture.startSpeedUp();
-            // initialisation du déplacement
-            vitesse = voiture.getSpeed();
-            carburant = voiture.getcurrentOil();
+
+               // Gestion du faux départ
+        if (feu.getCurrentState() != 0 && !enteringRace && !fauxDepart && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+            fauxDepart = true;
+            fauxDepartClock.restart();
+        }
+
+        if (fauxDepart) {
+            // Affichage de l'image f1_feu_dep_faux_dep.png pendant 3 secondes
+            if (fauxDepartClock.getElapsedTime().asSeconds() < 3.0f) {
+                feu.hideFeuSprite();
+                feu.showFoulSprite();
+            } else {
+                fauxDepart = false;
+                feu.reinitialiserFeu();
+            }
+        }
+        else {
+            feu.hideFoulSprite();
+            feu.showFeuSprite();
+            feu.updateFeuDepart();
+        }
+
+        if (!enteringRace) {
+            if (feu.isReady() && feu.getCurrentState() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
+                enterPressed = true;
+                enteringRace = true;
+                if (vitesse == 0)
+                    // demarrage de la voiture
+                    voiture.startspeedUp();
+                // initialisation du déplacement
+                vitesse = voiture.getSpeed();
+                carburant = voiture.getfuel();
 
             // demarrage du chronomètre
             affichage.startChrono();
         }
 
-        if (enterPressed){
+        else if (enterPressed){
             if (vitesse > 2)
             {
                 if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
@@ -117,96 +139,111 @@ int main()
     
             jeu.clear();
             vitesse = voiture.getSpeed();
-            carburant = voiture.getcurrentOil();
-            voiture.SpeedUp();
-            voiture.UseOfOil();
+            carburant = voiture.getfuel();
+            voiture.speedUp();
+            voiture.useFuel();
             jeu.move(vitesse);
 
-            // gestion obstacle
-            if (!invincible)
-                if (jeu.checkCollisionObs(voiture)){
-                    invincible = true;
-                    timer_invicible.restart();
-                }
-            if (timer_invicible.getElapsedTime().asSeconds() > 3.f)
-                invincible = false;
+                // gestion obstacle
+                if (!invincible)
+                    if (jeu.checkCollisionObs(voiture)){
+                        invincible = true;
+                        timer_invicible.restart();
+                    }
+                if (timer_invicible.getElapsedTime().asSeconds() > 3.f)
+                    invincible = false;
 
-            // gestion bonus
-            if (!inbuffable)
-                if (jeu.checkCollisionBonus(voiture)){
-                    inbuffable = true;
-                    timer_nonbuffable.restart();
-                }
-            if (timer_nonbuffable.getElapsedTime().asSeconds() > 1.f)
-                inbuffable = false;
+                // gestion bonus
+                if (!inbuffable)
+                    if (jeu.checkCollisionBonus(voiture)){
+                        inbuffable = true;
+                        timer_nonbuffable.restart();
+                    }
+                if (timer_nonbuffable.getElapsedTime().asSeconds() > 3.f)
+                    inbuffable = false;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                if (voiture.getX() > minX){
-                        if (!leftPressed){
-                            // déplacement d'une tuile vers la gauche du véhicule
-                            voiture.move(-64.f,0.f);
-                            // déplacement autorisé
-                            leftPressed = true;
-                            // mise à jour le temps du dernier déplacement
-                            lastMoveTime = std::chrono::steady_clock::now();
-                        }
-                
-                        std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-                        std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
-
-                        // on attend un quart de seconde (0.25 s) avant chaque déplacement
-                        if (duration.count() >= 250) {
-                            if (voiture.getX() > minX) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                    if (voiture.getX() > minX){
+                            if (!leftPressed){
                                 // déplacement d'une tuile vers la gauche du véhicule
                                 voiture.move(-64.f,0.f);
-                                // on met à jour le temps du dernier déplacement
+                                // déplacement autorisé
+                                leftPressed = true;
+                                // mise à jour le temps du dernier déplacement
                                 lastMoveTime = std::chrono::steady_clock::now();
                             }
-                        }
-                    }
-                } else {
-                    // déplacement interdit
-                    leftPressed = false;
-                }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-                if (voiture.getX() < maxX){
-                        if (!rightPressed){
-                            // déplacement d'une tuile vers la droite du véhicule
-                            voiture.move(64.f,0.f);
-                            // déplacement autorisé
-                            rightPressed = true;
-                            // mise à jour le temps du dernier déplacement
-                            lastMoveTime = std::chrono::steady_clock::now(); 
-                        }
+                    
+                            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                            std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
 
-                        std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
-                        std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
-
-                        // on attend un quart de seconde (0.25 s) avant chaque déplacement
-                        if (duration.count() >= 250){
-                            // Vérification limite droite
-                            if (voiture.getX() < maxX){
-                                // déplacement d'une tuile vers la droite du véhicule
-                                voiture.move(64.f,0.f);
-                                // on met à jour le temps du dernier déplacement
-                                lastMoveTime = std::chrono::steady_clock::now(); 
+                            // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                            if (duration.count() >= 250) {
+                                if (voiture.getX() > minX) {
+                                    // déplacement d'une tuile vers la gauche du véhicule
+                                    voiture.move(-64.f,0.f);
+                                    // on met à jour le temps du dernier déplacement
+                                    lastMoveTime = std::chrono::steady_clock::now();
+                                }
                             }
                         }
+                    } else {
+                        // déplacement interdit
+                        leftPressed = false;
                     }
-                } else {
-                    // déplacement interdit
-                    rightPressed = false;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+                    if (voiture.getX() < maxX){
+                            if (!rightPressed){
+                                // déplacement d'une tuile vers la droite du véhicule
+                                voiture.move(64.f,0.f);
+                                // déplacement autorisé
+                                rightPressed = true;
+                                // mise à jour le temps du dernier déplacement
+                                lastMoveTime = std::chrono::steady_clock::now(); 
+                            }
+
+                            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+                            std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
+
+                            // on attend un quart de seconde (0.25 s) avant chaque déplacement
+                            if (duration.count() >= 250){
+                                // Vérification limite droite
+                                if (voiture.getX() < maxX){
+                                    // déplacement d'une tuile vers la droite du véhicule
+                                    voiture.move(64.f,0.f);
+                                    // on met à jour le temps du dernier déplacement
+                                    lastMoveTime = std::chrono::steady_clock::now(); 
+                                }
+                            }
+                        }
+                    } else {
+                        // déplacement interdit
+                        rightPressed = false;
+                }
+                affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
             }
-            affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
         }
+
+        
+
         // on dessine le niveau
         window.clear();
         window.draw(jeu);
         window.draw(voiture);
-        affichage.drawHpDot(window,voiture.getHp(),IconHp);
-        affichage.drawSpeedometer(window,vitesse,voiture.getMaxSpeed()); // affichage de la jauge de vitesse
-        affichage.drawOilLevelBar(window,carburant,voiture.getMaxOil()); // affichage de la jauge de carburant
         window.draw(affichage); // affichage du chrono, de la distance et de la vitesse
+        // draw est de type const, il faut afficher autrement
+        affichage.drawHpDot(window);
+        affichage.drawSpeedometer(window); // affichage de la jauge de vitesse
+        affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
+        
+
+        /* game over
+        if (voiture.getHp() == 0 || (vitesse < 1 && vitesse > 0.001))
+        {
+            enterPressed = false;
+            affichage.gameOverNotice(window);
+        }
+        */
+        feu.draw(window);
         window.display();
     
     }

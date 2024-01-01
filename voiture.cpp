@@ -2,12 +2,15 @@
 #include <iostream> 
 #include <cmath>
 
-Voiture::Voiture(float x, float y, float speed, float maxSpeed, float currentOil, float maxOil, float hp, float maxHp, const sf::Texture& texture)
-    : _speed(speed), _maxSpeed(maxSpeed), _currentOil(currentOil), _maxOil(maxOil), _hp(hp), _maxHp(maxHp) {
-    // mise en place de la texture
-    this->setTexture(texture);
-    // positionnement de la voiture
-    this->setPosition(x, y);
+Voiture::Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp)
+    : _speed(speed), _maxSpeed(maxSpeed), _fuel(fuel), _maxFuel(maxFuel), _hp(hp), _maxHp(maxHp) {
+
+    if(!carTexture.loadFromFile("assets/voiture.png")){
+        std::cerr << "Erreur lors du chargement de l'image de la voiture" << std::endl;
+        EXIT_FAILURE;
+    }
+    setTexture(carTexture);
+    setPosition(x, y);
 }
 
 float Voiture::getX() const {
@@ -26,12 +29,12 @@ float Voiture::getMaxSpeed() const {
     return _maxSpeed;
 }
 
-float Voiture::getcurrentOil() const {
-    return _currentOil;
+float Voiture::getfuel() const {
+    return _fuel;
 }
 
-float Voiture::getMaxOil() const {
-    return _maxOil;
+float Voiture::getMaxFuel() const {
+    return _maxFuel;
 }
 
 float Voiture::getHp() const {
@@ -42,12 +45,12 @@ float Voiture::getMaxHp() const {
     return _maxHp;
 }
 
-void Voiture::startSpeedUp() {
+void Voiture::startspeedUp() {
     _speed += 5.0;
 }
 
-void Voiture::SpeedUp() {
-    if (_currentOil > 0.0){
+void Voiture::speedUp() {
+    if (_fuel > 0.0){
         _speed += 0.01;
         if (_speed > _maxSpeed)
             _speed = _maxSpeed;
@@ -58,15 +61,15 @@ void Voiture::SpeedUp() {
     }
 }
 
-void Voiture::UseOfOil() {
+void Voiture::useFuel() {
     if (_speed == 0.0) {
-        _currentOil -= 0.5;
+        _fuel -= 0.5;
     } else {
-        float consumptionRate = 0.001 * sqrt(_speed);
-        _currentOil -= consumptionRate;
+        float consumptionRate = 0.005 * sqrt(_speed);
+        _fuel -= consumptionRate;
     }
-    if (_currentOil < 0.0) {
-        _currentOil = 0.0;
+    if (_fuel < 0.0) {
+        _fuel = 0.0;
     }
 }
 
@@ -101,7 +104,7 @@ bool Voiture::collision(Bonus& bon)
             if (typeBonus == "life" && _hp < _maxHp)
                 _hp += valeur;
             if (typeBonus == "oil")
-                _currentOil += (_currentOil + valeur >= _maxOil) ? (_maxOil - _currentOil) : valeur;
+                _fuel += (_fuel + valeur >= _maxFuel) ? (_maxFuel - _fuel) : valeur;
             if (typeBonus == "boost")
                 _speed += (_speed + valeur >= _maxSpeed) ? (_maxSpeed - _speed) : valeur;
         }

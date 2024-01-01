@@ -1,10 +1,9 @@
-#ifndef CHRONO_DISTANCE_CALCULATOR_H
-#define CHRONO_DISTANCE_CALCULATOR_H
-
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iomanip>
 #include <sstream>
 #include <iostream>
+#include "voiture.hpp"
 
 class AffichageDonnees : public sf::Drawable, public sf::Transformable{
 private:
@@ -15,7 +14,9 @@ private:
     sf::Text distanceText;
     sf::Text vitesseText;
     sf::Text vitesseMaxReachedText;
+    sf::Text centralText;
     sf::Font font;
+    Voiture& voitureTrack;
 
     // Positionnement et taille de la jauge
     inline static float width = 200.f; // Largeur de la jauge
@@ -42,16 +43,18 @@ private:
     inline static float iconPosY = 20.0f;
     inline static float iconPosX_2nd = 900.f;
     inline static float iconPosY_2nd = 94.0f;
+    inline static sf::Sprite HpIcon;
+    inline static sf::Texture HpTexture;
 
 public:
-    AffichageDonnees();
+    AffichageDonnees(Voiture &v);
     void startChrono();
     void updateChronoDistance(float mapPosY);
     void updateVitesse(float distance);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void drawSpeedometer(sf::RenderWindow& window, float currentSpeed, float maxSpeed);
-    void drawOilLevelBar(sf::RenderWindow& window, float currentOil, float maxOil);
-    void drawHpDot(sf::RenderWindow& window, float numberHp,sf::Sprite& HpIconImage);
+    void drawSpeedometer(sf::RenderWindow& target);
+    void drawOilLevelBar(sf::RenderWindow& target);
+    void drawHpDot(sf::RenderWindow& target);
+    void gameOverNotice(sf::RenderWindow& window);
+    void checkpointNotice(sf::RenderWindow& window);
 };
-
-#endif // CHRONO_DISTANCE_CALCULATOR_H

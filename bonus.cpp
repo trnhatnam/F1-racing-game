@@ -18,8 +18,8 @@ Bonus::Bonus(){
             _typeBonus = "life"; _valeur = 1; setTexture(textures[0]); break;
         case 1:
             _typeBonus = "oil"; _valeur = 10; setTexture(textures[1]); break;
-        default:
-            _typeBonus = "spd" ; _valeur = 5; setTexture(textures[2]);
+        case 2:
+            _typeBonus = "spd" ; _valeur = 10; setTexture(textures[2]);
     }
 }
 
