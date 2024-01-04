@@ -99,14 +99,15 @@ bool Voiture::collision(Bonus& bon)
         bon.getPosition().y < getPosition().y &&
         bon.getPosition().y + 32.f > getPosition().y)
         {
-            std::string typeBonus = bon.getTypeBonus();
+            int typeBonus = bon.getTypeBonus();
             float valeur = bon.getValue();
-            if (typeBonus == "life" && _hp < _maxHp)
+            if (typeBonus == 0 && _hp < _maxHp)
                 _hp += valeur;
-            if (typeBonus == "oil")
+            if (typeBonus == 1)
                 _fuel += (_fuel + valeur >= _maxFuel) ? (_maxFuel - _fuel) : valeur;
-            if (typeBonus == "boost")
+            if (typeBonus == 2)
                 _speed += (_speed + valeur >= _maxSpeed) ? (_maxSpeed - _speed) : valeur;
+            bon.getUsed();
         }
     return false;
 }

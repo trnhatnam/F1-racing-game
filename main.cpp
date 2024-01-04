@@ -135,7 +135,7 @@ int main()
         else { 
         if (enterPressed){
             feu.hideFeuSprite();
-            if (vitesse > 2)
+            if (vitesse > 5)
             {
                 if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
                 {
