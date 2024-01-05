@@ -191,9 +191,7 @@ int main()
         window.clear();
         window.draw(jeu);
         window.draw(voiture);
-        window.draw(affichage); // affichage du chrono, de la distance et de la vitesse
-        // draw est de type const, il faut afficher autrement
-        affichage.drawHpDot(window);
+        window.draw(affichage); // affichage du chrono, de la distance et de la vitesse, vie
         affichage.drawSpeedometer(window); // affichage de la jauge de vitesse
         affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
         if(enteringRace)

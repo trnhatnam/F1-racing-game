@@ -155,6 +155,10 @@ void AffichageDonnees::draw(sf::RenderTarget& target, sf::RenderStates states) c
     target.draw(vitesseText);
     target.draw(vitesseMaxReachedText);
     target.draw(tempsReaction);
+
+    // pts de vie
+    HpIcon.setTextureRect(sf::IntRect(0,0,64*voitureTrack.getHp(), 64));
+    target.draw(HpIcon);
 }
 
 void AffichageDonnees::drawSpeedometer(sf::RenderWindow& window) {
@@ -222,22 +226,6 @@ void AffichageDonnees::drawOilLevelBar(sf::RenderWindow& window) {
     // utilisation de la couleur déterminée
     OilBar.setFillColor(barColor);
     window.draw(OilBar);
-}
-
-void AffichageDonnees::drawHpDot(sf::RenderWindow& window) {
-    // Boucle pour dessiner le nombre de points de vie avec l'icône spécifiée et le nombre de points de vie adéquat
-    /*
-    for (int i = 0; i < voitureTrack.getHp(); ++i) {
-        if (i < 3)
-            HpIcon.setPosition(iconPosX - (i + 1) * (HpIcon.getGlobalBounds().width + 10.0f), iconPosY);
-        else 
-            HpIcon.setPosition(iconPosX_2nd - (i - 3 + 1) * (HpIcon.getGlobalBounds().width + 10.0f), iconPosY_2nd);
-        window.draw(HpIcon);
-    }
-    */
-    HpIcon.setTextureRect(sf::IntRect(0,0,64*voitureTrack.getHp(), 64));
-    window.draw(HpIcon);
-    
 }
 
 void AffichageDonnees::gameOverNotice(sf::RenderWindow& window){

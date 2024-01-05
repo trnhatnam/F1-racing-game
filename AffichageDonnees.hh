@@ -59,7 +59,6 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawSpeedometer(sf::RenderWindow& target);
     void drawOilLevelBar(sf::RenderWindow& target);
-    void drawHpDot(sf::RenderWindow& target);
     void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed);
     void gameOverNotice(sf::RenderWindow& window);
     void checkpointNotice(sf::RenderWindow& window);
