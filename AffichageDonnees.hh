@@ -40,10 +40,8 @@ private:
     inline static float posY_oil = 750.f;  // Position Y de la jauge oil
 
     // on place les points de vie en haut à droite de la fenetre
-    inline static float iconPosX = 928.f;
-    inline static float iconPosY = 20.0f;
-    inline static float iconPosX_2nd = 900.f;
-    inline static float iconPosY_2nd = 94.0f;
+    inline static float hpPosX = 750.f;
+    inline static float hpPosY = 20.0f;
     inline static sf::Sprite HpIcon;
     inline static sf::Texture HpTexture;
 
