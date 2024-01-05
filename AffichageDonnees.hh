@@ -61,5 +61,10 @@ public:
     void drawOilLevelBar(sf::RenderWindow& target);
     void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed);
     void gameOverNotice(sf::RenderWindow& window);
+    void parametrage_chrono(sf::Text textFont);
+    void parametrage_vitesse(sf::Text textFont);
+    void parametrage_distance(sf::Text textFont);
+    void parametrage_vitesseMax(sf::Text textFont);
+    void parametrage_reacted_time(sf::Text textFont);
     void checkpointNotice(sf::RenderWindow& window);
 };

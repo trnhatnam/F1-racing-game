@@ -94,4 +94,3 @@ bool Jeu::checkCollisionBonus(Voiture &v)
             return true;
     return false;
 }
-

@@ -72,6 +72,14 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
     FeuSprite.setScale(0.35f,0.35f);
 }
 
+void AffichageDonnees::parametrage_chrono(sf::Text textFont) {
+    textFont.setFont(font);
+    textFont.setCharacterSize(24);
+    textFont.setFillColor(sf::Color::Black);
+    textFont.setPosition(32.f, 10.f);
+    textFont.setScale(2.f, 2.f);
+}
+
 void AffichageDonnees::startChrono() {
     startTime.restart();
 }

@@ -8,8 +8,8 @@ FeuDepart::FeuDepart() : currentState(0), readyToStart(false) {
             // Gérer l'erreur si la texture n'est pas chargée correctement
         }
     }
-    feuSprite.setTexture(feuTextures[0]); // Utilisation de la première texture par défaut
-    feuSprite.setPosition(2.f, 200.f); // Position du feu de départ
+    setTexture(feuTextures[0]); // Utilisation de la première texture par défaut
+    setPosition(2.f, 200.f); // Position du feu de départ
 
     if (!feuTextureFoul.loadFromFile("assets/f1_feu_dep_faux_dep.png")){
         std::cerr << "Erreur lors du chargement de la texture du feu de départ " << std::endl;
@@ -35,13 +35,13 @@ void FeuDepart::updateFeuDepart() {
         }
         if(firstLoop == 0 || nextState == 0){
             currentState = nextState;
-            feuSprite.setTexture(feuTextures[currentState]);
+            setTexture(feuTextures[currentState]);
         }
     }
 }
 
 void FeuDepart::draw(sf::RenderWindow& window) {
-    window.draw(feuSprite);
+    window.draw(*this);
     window.draw(FoulSprite);
 }
 
@@ -54,7 +54,7 @@ int FeuDepart::getCurrentState() const {
 }
 
 void FeuDepart::hideFeuSprite() {
-    feuSprite.setColor(sf::Color(0, 0, 0, 0)); // Masque le dessin du feu principal
+    setColor(sf::Color(0, 0, 0, 0)); // Masque le dessin du feu principal
 }
 
 void FeuDepart::hideFoulSprite() {
@@ -62,7 +62,7 @@ void FeuDepart::hideFoulSprite() {
 }
 
 void FeuDepart::showFeuSprite() {
-    feuSprite.setColor(sf::Color(255, 255, 255, 255)); // Réaffiche le dessin du feu principal
+    setColor(sf::Color(255, 255, 255, 255)); // Réaffiche le dessin du feu principal
 }
 
 void FeuDepart::showFoulSprite() {
@@ -72,6 +72,6 @@ void FeuDepart::showFoulSprite() {
 void FeuDepart::reinitialiserFeu() {
     currentState = 0;
     readyToStart = false;
-    feuSprite.setTexture(feuTextures[0]); // Utilisation de la première texture par défaut
-    feuSprite.setPosition(2.f, 200.f); // Position du feu de départ
+    setTexture(feuTextures[0]); // Utilisation de la première texture par défaut
+    setPosition(2.f, 200.f); // Position du feu de départ
 }
