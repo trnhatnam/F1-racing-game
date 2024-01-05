@@ -1,7 +1,7 @@
 #pragma once
 #include "AffichageDonnees.hh"
 
-class FeuDepart{
+class FeuDepart : public ElementDeJeu {
 private:
     int currentState; // État actuel du feu de départ
     sf::Texture feuTextureFoul; // Texture pour afficher l'image du feu de faux départ
