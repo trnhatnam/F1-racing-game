@@ -111,3 +111,56 @@ bool Voiture::collision(Bonus& bon)
         }
     return false;
 }
+
+// Fonction de déplacement à Gauche
+void Voiture::move_left(float minX, bool& leftPressed, std::chrono::steady_clock::time_point& lastMoveTime) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        if (this->getX() > minX) {
+            if (!leftPressed) {
+                // déplacement d'une tuile vers la gauche du véhicule
+                this->move(-64.f, 0.f);
+                // déplacement autorisé
+                leftPressed = true;
+                // mise à jour le temps du dernier déplacement
+                lastMoveTime = std::chrono::steady_clock::now();
+            }
+
+            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+            std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
+
+            // on attend un quart de seconde (0.25 s) avant chaque déplacement
+            if (duration.count() >= 250 && this->getX() > minX) {
+                // déplacement d'une tuile vers la gauche du véhicule
+                this->move(-64.f, 0.f);
+                // mise à jour le temps du dernier déplacement
+                lastMoveTime = std::chrono::steady_clock::now();
+            }
+        }
+    }
+}
+
+void Voiture::move_right(float maxX, bool& rightPressed, std::chrono::steady_clock::time_point& lastMoveTime) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        if (this->getX() < maxX) {
+            if (!rightPressed) {
+                // déplacement d'une tuile vers la droite du véhicule
+                this->move(64.f, 0.f);
+                // déplacement autorisé
+                rightPressed = true;
+                // mise à jour le temps du dernier déplacement
+                lastMoveTime = std::chrono::steady_clock::now();
+            }
+
+            std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
+            std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
+
+            // on attend un quart de seconde (0.25 s) avant chaque déplacement
+            if (duration.count() >= 250 && this->getX() < maxX) {
+                // déplacement d'une tuile vers la droite du véhicule
+                this->move(64.f, 0.f);
+                // mise à jour le temps du dernier déplacement
+                lastMoveTime = std::chrono::steady_clock::now();
+            }
+        }
+    }
+}

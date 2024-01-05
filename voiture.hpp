@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "obstacle.hh"
 #include "bonus.hh"
+#include <chrono>
+#include "time.h"
 
 class Voiture : public Obstacle{
 private:
@@ -30,4 +32,6 @@ public:
     void startspeedUp();
     void speedUp();
     void useFuel();
+    void move_left(float minX, bool& leftPressed, std::chrono::steady_clock::time_point& lastMoveTime);
+    void move_right(float maxX, bool& rightPressed, std::chrono::steady_clock::time_point& lastMoveTime);
 };

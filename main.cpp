@@ -4,7 +4,6 @@
 #include "voiture.hpp"
 #include "AffichageDonnees.hh"
 #include "FeuDepart.hh"
-#include "ImputClass.hh"
 #include <chrono>
 #include <cmath>
 #include <iostream>
@@ -99,7 +98,7 @@ int main()
 
         if (fauxDepart) {
             // Affichage de l'image f1_feu_dep_faux_dep.png pendant 3 secondes
-            if (fauxDepartClock.getElapsedTime().asSeconds() < 3.0f) {
+            if (fauxDepartClock.getElapsedTime().asSeconds() < 1.5f) {
                 feu.hideFeuSprite();
                 feu.showFoulSprite();
             } else {
@@ -176,16 +175,14 @@ int main()
             if (timer_nonbuffable.getElapsedTime().asSeconds() > 3.f)
                 inbuffable = false;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                InputManager::handleInput(sf::Keyboard::Left, voiture, leftPressed, rightPressed, lastMoveTime, minX, maxX);
-            } else {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                voiture.move_left(minX,leftPressed,lastMoveTime);
+            else
                 leftPressed = false;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                InputManager::handleInput(sf::Keyboard::Right, voiture, leftPressed, rightPressed, lastMoveTime, minX, maxX);
-            } else {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                voiture.move_right(maxX,rightPressed,lastMoveTime);
+            else
                 rightPressed = false;
-            }
 
             affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
             }

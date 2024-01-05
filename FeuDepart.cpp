@@ -22,15 +22,15 @@ FeuDepart::FeuDepart() : currentState(0), readyToStart(false) {
 void FeuDepart::updateFeuDepart() {
     static sf::Clock feuClock;
     int nextState = currentState;
-    static int firstLoop = 0;
+    static int firstLoop;
 
-    // Logique pour passer d'un état à l'autre toutes les 1 seconde
-    if (feuClock.getElapsedTime().asSeconds() > 1.0f) {
+    // Logique pour passer d'un état à l'autre toutes les 0.5 seconde
+    if (feuClock.getElapsedTime().asSeconds() > 0.5f) {
         feuClock.restart();
         ++nextState;
         if (nextState > 5) {
             nextState = 0; // Revenir à l'état initial après l'état 5
-            readyToStart = true; // Le feu est prêt à démarrer le jeu
+            readyToStart = true;
             firstLoop++;
         }
         if(firstLoop == 0 || nextState == 0){
