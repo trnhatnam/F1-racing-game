@@ -43,7 +43,7 @@ int main()
     Jeu jeu(level); 
 
     // création de l'objet voiture
-    Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3);
+    Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3,true);
 
     // initialisation des données de position et d'état
     float vitesse = 0.0f;

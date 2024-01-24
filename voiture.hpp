@@ -13,8 +13,9 @@ private:
     float _maxFuel;
     float _hp;
     float _maxHp;
+    bool _user;
 public:
-    Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp);
+    Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp, bool user);
 
     float getSpeed() const;
     float getX() const;

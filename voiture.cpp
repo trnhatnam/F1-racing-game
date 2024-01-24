@@ -2,12 +2,17 @@
 #include <iostream> 
 #include <cmath>
 
-Voiture::Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp)
-    : _speed(speed), _maxSpeed(maxSpeed), _fuel(fuel), _maxFuel(maxFuel), _hp(hp), _maxHp(maxHp) {
+Voiture::Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp, bool user)
+    : _speed(speed), _maxSpeed(maxSpeed), _fuel(fuel), _maxFuel(maxFuel), _hp(hp), _maxHp(maxHp), _user(user) {
 
     // les textures sont déjà initalisées car le constructeur par défaut d'obstacle est appelé
-    setTextureRect(sf::IntRect(192,0,64,64)); 
-    setPosition(x, y);
+    if(user){
+        setTextureRect(sf::IntRect(192,0,64,64)); 
+        setPosition(x, y);
+    } else {
+        setTextureRect(sf::IntRect(256+64*(rand()%4),0,64,64)); 
+        setPosition(x, y);
+    }
 }
 
 float Voiture::getX() const {

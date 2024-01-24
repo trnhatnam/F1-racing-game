@@ -41,9 +41,9 @@ void Jeu::move(float offsetY)
 }
 void Jeu::spawn_obstacle()
 {
-    if (rand() % 4 == 3)
+    if (rand() % 6 >= 3)
     {
-        Voiture v(320 + (rand()%5)*64.f, -64, 0, 50, 20, 20, 3, 3);
+        Voiture v(320 + (rand()%5)*64.f, -64, 0, 50, 20, 20, 3, 3, false);
         v.startspeedUp();
         v.setColor(sf::Color(255, 255, 200));
         vect_voiture.push_back(v);
