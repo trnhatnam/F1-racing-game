@@ -135,14 +135,14 @@ int main()
         else { 
         if (enterPressed){
             feu.hideFeuSprite();
-            if (vitesse > 5)
+            if (vitesse > 7)
             {
-                if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 1.5f)
+                if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 2.f)
                 {
                     jeu.spawn_obstacle();
                     clockObs.restart();
                 }
-                if (clockBon.getElapsedTime().asSeconds() > 1/vitesse + 4.f)
+                if (clockBon.getElapsedTime().asSeconds() > 1/vitesse + 6.f)
                 {
                     
                     jeu.spawn_bonus();
@@ -199,7 +199,7 @@ int main()
         
 
  
-        if (voiture.getHp() == 0 || (vitesse < 1 && vitesse > 0.001))
+        if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0.001))
         {
             feu.hideFeuSprite();
             enterPressed = false;

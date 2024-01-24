@@ -1,5 +1,5 @@
 #include "jeu.hpp"
-
+#include <typeinfo>
 
 Jeu::Jeu(int* level):_level(level)
 {
@@ -32,12 +32,28 @@ void Jeu::move(float offsetY)
 
     for (auto& bon : vect_bonus)
         bon.move(0.f, offsetY);
+
+    for (auto& v : vect_voiture) // ce sont les autres voitures
+    {
+        v.speedUp();
+        v.move(0.f, offsetY - v.getSpeed());
+    }
 }
 void Jeu::spawn_obstacle()
 {
-    Obstacle obs;
-    obs.setPosition(sf::Vector2f(320.f + (rand()%5)*64.f, -64.f));
-    vect_obstacles.push_back(obs);
+    if (rand() % 4 == 3)
+    {
+        Voiture v(320 + (rand()%5)*64.f, -64, 0, 50, 20, 20, 3, 3);
+        v.startspeedUp();
+        v.setColor(sf::Color(255, 255, 200));
+        vect_voiture.push_back(v);
+    }
+    else
+    {
+        Obstacle obs;
+        obs.setPosition(sf::Vector2f(320.f + (rand()%5)*64.f, -64.f));
+        vect_obstacles.push_back(obs);
+    }
 }
 
 void Jeu::spawn_bonus()
@@ -50,15 +66,22 @@ void Jeu::spawn_bonus()
 void Jeu::clear()
 {
     for (auto iter = vect_obstacles.begin(); iter != vect_obstacles.end(); ) {
-        if (iter->getPosition().y > 960.f)
+        if (iter->getPosition().y > 960.f) // obstacles hors de la map
             iter = vect_obstacles.erase(iter);
         else
             ++iter;
     }
 
     for (auto iter = vect_bonus.begin(); iter != vect_bonus.end(); ) {
-        if (iter->getPosition().y > 960.f || iter->isUsed())
+        if (iter->getPosition().y > 960.f || iter->isUsed()) // bonus hors de la map
             iter = vect_bonus.erase(iter);
+        else
+            ++iter;
+    }
+
+    for (auto iter = vect_voiture.begin(); iter != vect_voiture.end(); ) {
+        if (iter->getPosition().y > 960.f || iter->getPosition().y < -360.f) // voitures hors de la map
+            iter = vect_voiture.erase(iter);
         else
             ++iter;
     }
@@ -70,10 +93,12 @@ void Jeu::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(map1);
     target.draw(map2);
     target.draw(map3);
-    for (auto bon : vect_bonus)
+    for (auto& bon : vect_bonus)
         target.draw(bon);
-    for (auto obs : vect_obstacles)
+    for (auto& obs : vect_obstacles)
         target.draw(obs);
+    for (auto& v : vect_voiture)
+        target.draw(v);
 }
 
 float Jeu::getPositionMap1(){
@@ -84,6 +109,9 @@ bool Jeu::checkCollisionObs(Voiture &v)
 {
     for (auto& obs : vect_obstacles)
         if (v.collision(obs))
+            return true;
+    for (auto& voi : vect_voiture)
+        if (v.collision(voi))
             return true;
     return false;
 }

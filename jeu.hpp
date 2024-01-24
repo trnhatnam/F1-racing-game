@@ -39,4 +39,5 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         // les vecteurs d'obstacles et bonus
         vector<Obstacle> vect_obstacles;
         vector<Bonus> vect_bonus;
+        vector<Voiture> vect_voiture; // ce sont les voitures obstacles à l'utilisateur
 };
