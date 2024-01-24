@@ -3,9 +3,10 @@
 
 Jeu::Jeu(int* level):_level(level)
 {
-    if (!map1.load("tileset.png", sf::Vector2u(64, 64), level, 15, 15) ||
-        !map2.load("tileset.png", sf::Vector2u(64, 64), level, 15, 15) ||
-        !map3.load("tileset.png", sf::Vector2u(64, 64), level, 15, 15))
+    skin = "assets/tileset.png";
+    if (!map1.load(skin, sf::Vector2u(64, 64), level, 15, 15) ||
+        !map2.load(skin, sf::Vector2u(64, 64), level, 15, 15) ||
+        !map3.load(skin, sf::Vector2u(64, 64), level, 15, 15))
         std::cout << "Erreur initialisation des maps" << std::endl;
     
     map1.setPosition(0.f, 0.f);

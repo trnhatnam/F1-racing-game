@@ -10,7 +10,7 @@ class Bonus: public ElementDeJeu{
         int _typeBonus;
         bool _used;
         inline static bool areTexturesInitialized;
-        inline static vector<sf::Texture> textures;
+        inline static sf::Texture tileset;
     public:
         float getValue();
         bool isUsed();
