@@ -5,11 +5,8 @@
 Voiture::Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp)
     : _speed(speed), _maxSpeed(maxSpeed), _fuel(fuel), _maxFuel(maxFuel), _hp(hp), _maxHp(maxHp) {
 
-    if(!carTexture.loadFromFile("assets/voiture.png")){
-        std::cerr << "Erreur lors du chargement de l'image de la voiture" << std::endl;
-        EXIT_FAILURE;
-    }
-    setTexture(carTexture);
+    // les textures sont déjà initalisées car le constructeur par défaut d'obstacle est appelé
+    setTextureRect(sf::IntRect(192,0,64,64)); 
     setPosition(x, y);
 }
 

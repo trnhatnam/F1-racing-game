@@ -13,7 +13,6 @@ private:
     float _maxFuel;
     float _hp;
     float _maxHp;
-    inline static sf::Texture carTexture;
 public:
     Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp);
 

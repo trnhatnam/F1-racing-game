@@ -8,5 +8,5 @@ class Obstacle: public ElementDeJeu{
         Obstacle();
     private:
         inline static bool areTexturesInitialized;
-        inline static vector<sf::Texture> textures;
+        inline static sf::Texture tileset;
 };
