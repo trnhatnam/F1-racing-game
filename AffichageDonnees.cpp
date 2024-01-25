@@ -5,35 +5,11 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
         std::cerr << "Erreur pour la police" << std::endl;
     }
 
-    chronoText.setFont(font);
-    chronoText.setCharacterSize(24);
-    chronoText.setFillColor(sf::Color::Black);
-    chronoText.setPosition(32.f, 10.f);
-    chronoText.setScale(2.f, 2.f);
-
-    distanceText.setFont(font);
-    distanceText.setCharacterSize(18);
-    distanceText.setFillColor(sf::Color::White);
-    distanceText.setPosition(416.f, 725.f);
-    distanceText.setScale(2.f, 2.f);
-
-    vitesseText.setFont(font);
-    vitesseText.setCharacterSize(24);
-    vitesseText.setFillColor(sf::Color::Black);
-    vitesseText.setPosition(32.f, 120.f);
-    vitesseText.setScale(1.5f, 1.5f);
-
-    vitesseMaxReachedText.setFont(font);
-    vitesseMaxReachedText.setCharacterSize(18);
-    vitesseMaxReachedText.setFillColor(sf::Color::Black);
-    vitesseMaxReachedText.setPosition(800.f,250.f);
-    vitesseMaxReachedText.setScale(1.5f,1.5f);
-
-    tempsReaction.setFont(font);
-    tempsReaction.setCharacterSize(18);
-    tempsReaction.setFillColor(sf::Color::Black);
-    tempsReaction.setPosition(20.f,230.f);
-    tempsReaction.setScale(1.5f,1.5f);
+    chronoText = parametrage_chrono(chronoText);
+    distanceText = parametrage_distance(distanceText);
+    vitesseText = parametrage_vitesse(vitesseText);
+    vitesseMaxReachedText = parametrage_vitesseMax(vitesseMaxReachedText);
+    tempsReaction = parametrage_reacted_time(tempsReaction);
 
     if(!SpeedPicture.loadFromFile("assets/max_speed.png")){
         std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
@@ -72,12 +48,55 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
     FeuSprite.setScale(0.35f,0.35f);
 }
 
-void AffichageDonnees::parametrage_chrono(sf::Text textFont) {
+sf::Text AffichageDonnees::parametrage_chrono(sf::Text textFont) {
     textFont.setFont(font);
     textFont.setCharacterSize(24);
     textFont.setFillColor(sf::Color::Black);
     textFont.setPosition(32.f, 10.f);
     textFont.setScale(2.f, 2.f);
+
+    return textFont;
+}
+
+sf::Text AffichageDonnees::parametrage_distance(sf::Text textFont) {
+    textFont.setFont(font);
+    textFont.setCharacterSize(18);
+    textFont.setFillColor(sf::Color::White);
+    textFont.setPosition(416.f, 725.f);
+    textFont.setScale(2.f, 2.f);
+
+    return textFont;
+}
+
+
+sf::Text AffichageDonnees::parametrage_vitesse(sf::Text textFont) {
+    textFont.setFont(font);
+    textFont.setCharacterSize(24);
+    textFont.setFillColor(sf::Color::Black);
+    textFont.setPosition(32.f, 120.f);
+    textFont.setScale(1.5f, 1.5f);
+
+    return textFont;
+}
+
+sf::Text AffichageDonnees::parametrage_vitesseMax(sf::Text textFont) {
+    textFont.setFont(font);
+    textFont.setCharacterSize(18);
+    textFont.setFillColor(sf::Color::Black);
+    textFont.setPosition(800.f,250.f);
+    textFont.setScale(1.5f,1.5f);
+    
+    return textFont;
+}
+
+sf::Text AffichageDonnees::parametrage_reacted_time(sf::Text textFont) {
+    textFont.setFont(font);
+    textFont.setCharacterSize(18);
+    textFont.setFillColor(sf::Color::Black);
+    textFont.setPosition(20.f,230.f);
+    textFont.setScale(1.5f,1.5f);
+
+    return textFont;
 }
 
 void AffichageDonnees::startChrono() {
