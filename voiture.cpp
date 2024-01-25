@@ -67,7 +67,7 @@ void Voiture::useFuel() {
     if (_speed == 0.0) {
         _fuel -= 0.5;
     } else {
-        float consumptionRate = 0.005 * sqrt(_speed);
+        float consumptionRate = 10e-4 * sqrt(_speed) + 10e-5 * _speed;
         _fuel -= consumptionRate;
     }
     if (_fuel < 0.0) {
