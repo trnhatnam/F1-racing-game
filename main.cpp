@@ -90,31 +90,8 @@ int main()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
 
-               // Gestion du faux départ
-        if (feu.getCurrentState() != 0 && !enteringRace && !fauxDepart && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-            fauxDepart = true;
-            fauxDepartClock.restart();
-        }
-
-        if (fauxDepart) {
-            // Affichage de l'image f1_feu_dep_faux_dep.png pendant 3 secondes
-            if (fauxDepartClock.getElapsedTime().asSeconds() < 1.5f) {
-                feu.hideFeuSprite();
-                feu.showFoulSprite();
-            } else {
-                fauxDepart = false;
-                feu.reinitialiserFeu();
-            }
-        }
-        else {
-            feu.hideFoulSprite();
-            feu.showFeuSprite();
-            feu.updateFeuDepart();
-        }
-        if(feu.isReady() && firstLoop == 0){
-            first_time = reactedTime.getElapsedTime().asSeconds();
-            firstLoop++;
-        }
+        // Gestion du faux départ
+        feu.gestionFeu(feu, fauxDepart, enteringRace, firstLoop, first_time, fauxDepartClock, reactedTime);
 
         if (!enteringRace) {
             if (feu.isReady() && feu.getCurrentState() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){

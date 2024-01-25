@@ -75,3 +75,30 @@ void FeuDepart::reinitialiserFeu() {
     setTexture(feuTextures[0]); // Utilisation de la première texture par défaut
     setPosition(2.f, 200.f); // Position du feu de départ
 }
+
+void FeuDepart::gestionFeu(FeuDepart& feu, bool& fauxDepart, bool& enteringRace, int& firstLoop, float& first_time, sf::Clock& fauxDepartClock, sf::Clock& reactedTime) {
+    if (feu.getCurrentState() != 0 && !enteringRace && !fauxDepart && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+        fauxDepart = true;
+        fauxDepartClock.restart();
+    }
+
+    if (fauxDepart) {
+        // Affichage de l'image f1_feu_dep_faux_dep.png pendant 3 secondes
+        if (fauxDepartClock.getElapsedTime().asSeconds() < 1.5f) {
+            feu.hideFeuSprite();
+            feu.showFoulSprite();
+        } else {
+            fauxDepart = false;
+            feu.reinitialiserFeu();
+        }
+    }
+    else {
+        feu.hideFoulSprite();
+        feu.showFeuSprite();
+        feu.updateFeuDepart();
+    }
+    if(feu.isReady() && firstLoop == 0){
+        first_time = reactedTime.getElapsedTime().asSeconds();
+        firstLoop++;
+    }
+}

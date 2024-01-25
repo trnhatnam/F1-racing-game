@@ -23,4 +23,6 @@ public:
     void showFeuSprite(); // Réaffiche le dessin du feu principal
     void showFoulSprite(); // Réaffiche le dessin du faux départ
     void reinitialiserFeu(); // Reinitialisation du feu de départ
+    // Gestion du comportement du Feu avant le lancement du jeu
+    void gestionFeu(FeuDepart& feu, bool& fauxDepart, bool& enteringRace, int& firstLoop, float& first_time, sf::Clock& fauxDepartClock, sf::Clock& reactedTime);
 };
