@@ -11,41 +11,22 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
     vitesseMaxReachedText = parametrage_vitesseMax(vitesseMaxReachedText);
     tempsReaction = parametrage_reacted_time(tempsReaction);
 
-    if(!SpeedPicture.loadFromFile("assets/max_speed.png")){
-        std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
-        EXIT_FAILURE;
-    }
     // Logo vitesse
-    CompteurSpeed.setTexture(SpeedPicture);
-    CompteurSpeed.setPosition(logoPosX,logoPosY);
-    CompteurSpeed.setScale(1.25f,1.25f);
-
-    // initialisation des textures pour l'affichage
-    if(!TankPicture.loadFromFile("assets/pompe_car.png")){
-        std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
-        EXIT_FAILURE;
-    }
+    CompteurSpeed = logo_speed(CompteurSpeed);
     // Oil tank texture
-    OilTank.setTexture(TankPicture);
-    OilTank.setPosition(imagPosX,imagPosY);
+    OilTank = logo_tank(OilTank);
 
-    // Points de vie
     if(!HpTexture.loadFromFile("assets/Hp_logo.png", sf::IntRect(0, 0, 64*v.getMaxHp(), 64))){
         std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
         EXIT_FAILURE;
     }
+    // Points de vie
     HpIcon.setPosition(hpPosX, hpPosY);
     HpTexture.setRepeated(true);
     HpIcon.setTexture(HpTexture);
 
     // Feu de départ
-    if(!FeuTexture.loadFromFile("assets/f1_feu_dep_tmp_rec.png")){
-        std::cerr << "Erreur lors du chargement de l'image du feu" << std::endl;
-        EXIT_FAILURE;
-    }
-    FeuSprite.setTexture(FeuTexture);
-    FeuSprite.setPosition(feuPosX,feuPosY);
-    FeuSprite.setScale(0.35f,0.35f);
+    FeuSprite = logo_feu_dep(FeuSprite);
 }
 
 sf::Text AffichageDonnees::parametrage_chrono(sf::Text textFont) {
@@ -97,6 +78,41 @@ sf::Text AffichageDonnees::parametrage_reacted_time(sf::Text textFont) {
     textFont.setScale(1.5f,1.5f);
 
     return textFont;
+}
+
+sf::Sprite AffichageDonnees::logo_speed(sf::Sprite SpeedSprite) {
+    if(!SpeedPicture.loadFromFile("assets/max_speed.png")){
+        std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
+        EXIT_FAILURE;
+    }
+    SpeedSprite.setTexture(SpeedPicture);
+    SpeedSprite.setPosition(logoPosX,logoPosY);
+    SpeedSprite.setScale(1.25f,1.25f);
+
+    return SpeedSprite;
+}
+
+sf::Sprite AffichageDonnees::logo_tank(sf::Sprite OilSprite) {
+    if(!TankPicture.loadFromFile("assets/pompe_car.png")){
+        std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
+        EXIT_FAILURE;
+    }
+    OilSprite.setTexture(TankPicture);
+    OilSprite.setPosition(imagPosX,imagPosY);
+
+    return OilSprite;
+}
+
+sf::Sprite AffichageDonnees::logo_feu_dep(sf::Sprite FeuDepartSprite) {
+    if(!FeuTexture.loadFromFile("assets/f1_feu_dep_tmp_rec.png")){
+        std::cerr << "Erreur lors du chargement de l'image du feu" << std::endl;
+        EXIT_FAILURE;
+    }
+    FeuDepartSprite.setTexture(FeuTexture);
+    FeuDepartSprite.setPosition(feuPosX,feuPosY);
+    FeuDepartSprite.setScale(0.35f,0.35f);
+
+    return FeuDepartSprite;
 }
 
 void AffichageDonnees::startChrono() {
