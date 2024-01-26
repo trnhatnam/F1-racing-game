@@ -80,7 +80,7 @@ bool Voiture::collision(Obstacle& obs)
     // La voiture collide avec un obstacle
     if (obs.getPosition().x == getPosition().x && 
         obs.getPosition().y < getPosition().y &&
-        obs.getPosition().y + 32.f > getPosition().y)
+        obs.getPosition().y + 48.f > getPosition().y)
         {
             _hp -= _speed > 0.5*getMaxSpeed() ? 2 : 1;
             if (_hp < 0)
@@ -99,7 +99,7 @@ bool Voiture::collision(Bonus& bon)
     // La voiture collide avec un bonus
     if (bon.getPosition().x == getPosition().x && 
         bon.getPosition().y < getPosition().y &&
-        bon.getPosition().y + 32.f > getPosition().y)
+        bon.getPosition().y + 48.f > getPosition().y)
         {
             int typeBonus = bon.getTypeBonus();
             float valeur = bon.getValue();
