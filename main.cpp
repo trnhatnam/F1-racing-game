@@ -112,14 +112,14 @@ int main()
         else { 
         if (enterPressed){
             feu.hideFeuSprite();
-            if (vitesse > 7)
+            if (vitesse > 5)
             {
-                if (clockObs.getElapsedTime().asSeconds() > 1/vitesse + 2.f)
+                if (clockObs.getElapsedTime().asSeconds() > 60/(vitesse)) // plus la voiture va vite, plus les élements de jeu apparaissent vite
                 {
                     jeu.spawn_obstacle();
                     clockObs.restart();
                 }
-                if (clockBon.getElapsedTime().asSeconds() > 1/vitesse + 6.f)
+                if (clockBon.getElapsedTime().asSeconds() > 75/(vitesse))
                 {
                     
                     jeu.spawn_bonus();
