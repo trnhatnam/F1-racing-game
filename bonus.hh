@@ -6,15 +6,15 @@ using namespace std;
 
 class Bonus: public ElementDeJeu{
     private: 
-        float _valeur;
+        int _valeur;
         int _typeBonus;
         bool _used;
         inline static bool areTexturesInitialized;
         inline static sf::Texture tileset;
     public:
-        float getValue();
+        int getValue() const;
         bool isUsed();
         void getUsed();
-        int getTypeBonus();
+        int getTypeBonus() const;
         Bonus();
 };

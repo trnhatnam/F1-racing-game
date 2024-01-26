@@ -25,6 +25,7 @@ public:
     float getMaxFuel() const;
     float getHp() const;
     float getMaxHp() const;
+    int getValue() const;
 
     bool collision(Obstacle& obs);
     bool collision(Bonus& bonus);

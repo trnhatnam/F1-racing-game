@@ -9,9 +9,11 @@ Voiture::Voiture(float x, float y, float speed, float maxSpeed, float fuel, floa
     if(user){
         setTextureRect(sf::IntRect(192,0,64,64)); 
         setPosition(x, y);
+        valeur = 0;
     } else {
         setTextureRect(sf::IntRect(256+64*(rand()%4),0,64,64)); 
         setPosition(x, y);
+        valeur = 2;
     }
 }
 
@@ -82,7 +84,7 @@ bool Voiture::collision(Obstacle& obs)
         obs.getPosition().y < getPosition().y &&
         obs.getPosition().y + 48.f > getPosition().y)
         {
-            _hp -= _speed > 0.5*getMaxSpeed() ? 2 : 1;
+            _hp -= obs.getValue();
             if (_hp < 0)
                 _hp = 0;
             if (_speed > 5)
@@ -102,7 +104,7 @@ bool Voiture::collision(Bonus& bon)
         bon.getPosition().y + 48.f > getPosition().y)
         {
             int typeBonus = bon.getTypeBonus();
-            float valeur = bon.getValue();
+            int valeur = bon.getValue();
             if (typeBonus == 0 && _hp < _maxHp)
                 _hp += valeur;
             if (typeBonus == 1)
@@ -165,4 +167,9 @@ void Voiture::move_right(float maxX, bool& rightPressed, std::chrono::steady_clo
             }
         }
     }
+}
+
+int Voiture::getValue() const
+{
+    return valeur;
 }

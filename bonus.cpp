@@ -18,12 +18,12 @@ Bonus::Bonus(){
     }
 }
 
-int Bonus::getTypeBonus()
+int Bonus::getTypeBonus() const
 {
     return _typeBonus;
 }
 
-float Bonus::getValue()
+int Bonus::getValue() const
 {
     return _valeur;
 }

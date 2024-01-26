@@ -1,6 +1,6 @@
 #include "FeuDepart.hh"
 
-FeuDepart::FeuDepart() : currentState(0), readyToStart(false) {
+FeuDepart::FeuDepart() : currentState(0), readyToStart(false), _valeur(0) {
     for (int i = 0; i < 6; ++i) {
         std::string texturePath = "assets/f1_feu_dep_" + std::to_string(i) + ".png";
         if (!feuTextures[i].loadFromFile(texturePath)) {
@@ -101,4 +101,9 @@ void FeuDepart::gestionFeu(FeuDepart& feu, bool& fauxDepart, bool& enteringRace,
         first_time = reactedTime.getElapsedTime().asSeconds();
         firstLoop++;
     }
+}
+
+int FeuDepart::getValue() const
+{
+    return _valeur;
 }

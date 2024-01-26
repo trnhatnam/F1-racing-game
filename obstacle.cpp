@@ -1,6 +1,6 @@
 #include "obstacle.hh"
 
-Obstacle::Obstacle()
+Obstacle::Obstacle():valeur(1)
 {
     if (!areTexturesInitialized)
     {
@@ -9,4 +9,9 @@ Obstacle::Obstacle()
     }
     setTexture(tileset);
     setTextureRect(sf::IntRect((rand() % 3)*64, 0, 64,64));
+}
+
+int Obstacle::getValue() const
+{
+    return valeur;
 }

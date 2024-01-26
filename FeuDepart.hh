@@ -10,10 +10,10 @@ private:
     sf::Sprite feuSprite; // Sprite pour afficher les différentes textures
     bool readyToStart; // Booléen pour indiquer si le jeu peut être démarré
     sf::Clock fauxDepartClock; // Chronomètre pour le faux départ
-
+    int _valeur;
 public:
     FeuDepart();
-
+    int getValue() const;
     void updateFeuDepart(); // Met à jour l'état du feu de départ
     void draw(sf::RenderWindow& window); // Redéfinition de la méthode draw pour dessiner le feu de départ
     bool isReady() const; // Renvoie l'état du feu de départ pour démarrer le jeu
