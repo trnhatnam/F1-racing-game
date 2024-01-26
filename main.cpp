@@ -16,7 +16,7 @@ int main()
     // on crée la fenêtre
     srand(time(NULL));
     sf::RenderWindow window(sf::VideoMode(960, 960), "Tilemap");
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(30);
     window.setVerticalSyncEnabled(true);
     // on définit le niveau à l'aide de numéro de tuiles
     int level[] =

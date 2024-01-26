@@ -53,7 +53,7 @@ void Voiture::startspeedUp() {
 
 void Voiture::speedUp() {
     if (_fuel > 0.0){
-        _speed += 0.01;
+        _speed += 0.01*((10/_speed) + 1);
         if (_speed > _maxSpeed)
             _speed = _maxSpeed;
     } else { // perte de vitese due au manque de carburant
@@ -67,7 +67,7 @@ void Voiture::useFuel() {
     if (_speed == 0.0) {
         _fuel -= 0.5;
     } else {
-        float consumptionRate = 10e-4 * sqrt(_speed) + 10e-5 * _speed;
+        float consumptionRate = 1e-3 * _speed;
         _fuel -= consumptionRate;
     }
     if (_fuel < 0.0) {
@@ -82,7 +82,7 @@ bool Voiture::collision(Obstacle& obs)
         obs.getPosition().y < getPosition().y &&
         obs.getPosition().y + 32.f > getPosition().y)
         {
-            _hp--;
+            _hp -= _speed > 0.5*getMaxSpeed() ? 2 : 1;
             if (_hp < 0)
                 _hp = 0;
             if (_speed > 5)
