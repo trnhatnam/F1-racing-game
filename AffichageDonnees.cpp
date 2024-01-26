@@ -119,25 +119,26 @@ void AffichageDonnees::startChrono() {
     startTime.restart();
 }
 
-void AffichageDonnees::updateChronoDistance(float mapPosY) {
+AffichageDonnees& operator+=(AffichageDonnees& dashboard, float mapPosY)
+{
     static sf::Clock clock;
     static float lastMapPosY = mapPosY;
 
     if (mapPosY > lastMapPosY) {
-        distanceParcourue += mapPosY - lastMapPosY;
+        dashboard.distanceParcourue += mapPosY - lastMapPosY;
         lastMapPosY = mapPosY;
     }
     else if (mapPosY < lastMapPosY) {
-        distanceParcourue += lastMapPosY - mapPosY;
+        dashboard.distanceParcourue += lastMapPosY - mapPosY;
         lastMapPosY = mapPosY;
     }
 
-    float distanceParcourueMetres = distanceParcourue / (64.f / 1.5f);
+    float distanceParcourueMetres = dashboard.distanceParcourue / (64.f / 1.5f);
 
     std::ostringstream stream;
     stream << std::fixed << std::setprecision(2) << distanceParcourueMetres;
     std::string distanceStr = stream.str();
-    distanceText.setString(distanceStr + " m");
+    dashboard.distanceText.setString(distanceStr + " m");
 
     sf::Time elapsedTime = clock.getElapsedTime();
 
@@ -152,9 +153,10 @@ void AffichageDonnees::updateChronoDistance(float mapPosY) {
     std::string timeStr = minutesStr + " : " +
                         secondsStr + " : " +
                         std::to_string(milliseconds);
-    chronoText.setString(timeStr);
+    dashboard.chronoText.setString(timeStr);
 
-    updateVitesse(distanceParcourueMetres);
+    dashboard.updateVitesse(distanceParcourueMetres);
+    return dashboard;
 }
 
 void AffichageDonnees::updateVitesse(float distance) {

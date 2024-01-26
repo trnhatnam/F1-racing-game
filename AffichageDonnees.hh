@@ -53,14 +53,17 @@ private:
 
 public:
     AffichageDonnees(Voiture &v);
+    
     void startChrono();
-    void updateChronoDistance(float mapPosY);
+    //void updateChronoDistance(float mapPosY);
+    friend AffichageDonnees& operator+=(AffichageDonnees& dashboard, float mapPosY);
     void updateVitesse(float distance);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawSpeedometer(sf::RenderWindow& target);
     void drawOilLevelBar(sf::RenderWindow& target);
     void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed);
     void gameOverNotice(sf::RenderWindow& window);
+
     sf::Text parametrage_chrono(sf::Text textFont);
     sf::Text parametrage_vitesse(sf::Text textFont);
     sf::Text parametrage_distance(sf::Text textFont);

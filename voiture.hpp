@@ -16,6 +16,7 @@ private:
     bool _user;
 public:
     Voiture(float x, float y, float speed, float maxSpeed, float fuel, float maxFuel, float hp, float maxHp, bool user);
+    friend Voiture& operator+=(Voiture& v, float offsetY);
 
     float getSpeed() const;
     float getX() const;
@@ -30,7 +31,7 @@ public:
     bool collision(Obstacle& obs);
     bool collision(Bonus& bonus);
 
-    void startspeedUp();
+    //void startspeedUp();
     void speedUp();
     void useFuel();
     void move_left(float minX, bool& leftPressed, std::chrono::steady_clock::time_point& lastMoveTime);

@@ -100,7 +100,7 @@ int main()
                 enteringRace = true;
                 if (vitesse == 0)
                     // demarrage de la voiture
-                    voiture.startspeedUp();
+                    voiture += 5.f;
                 // initialisation du déplacement
                 vitesse = voiture.getSpeed();
                 carburant = voiture.getfuel();
@@ -161,7 +161,7 @@ int main()
             else
                 rightPressed = false;
 
-            affichage.updateChronoDistance(jeu.getPositionMap1()); // mise à jour des données de chrono, distance et vitesse
+            affichage += jeu.getPositionMap1(); // mise à jour des données de chrono, distance et vitesse
             }
         }
         // on dessine le niveau

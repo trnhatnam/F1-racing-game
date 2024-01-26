@@ -49,9 +49,9 @@ float Voiture::getMaxHp() const {
     return _maxHp;
 }
 
-void Voiture::startspeedUp() {
-    _speed += 5.0;
-}
+// void Voiture::startspeedUp() {
+//     _speed += 5.0;
+// }
 
 void Voiture::speedUp() {
     if (_fuel > 0.0){
@@ -172,4 +172,11 @@ void Voiture::move_right(float maxX, bool& rightPressed, std::chrono::steady_clo
 int Voiture::getValue() const
 {
     return valeur;
+}
+
+
+Voiture& operator+=(Voiture& v, float offsetY)
+{
+    v._speed += offsetY;
+    return v;
 }
