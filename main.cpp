@@ -174,9 +174,7 @@ int main()
         if(enteringRace)
             affichage.ReactedTime(window,first_time,second_time);
         
-
- 
-        if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0.001))
+        if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0))
         {
             feu.hideFeuSprite();
             enterPressed = false;
