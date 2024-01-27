@@ -16,12 +16,12 @@ using namespace std;
 
 int main()
 {
-    // on crée la fenêtre
+    // --- on crée la fenêtre ---
     srand(time(NULL));
-    sf::RenderWindow window(sf::VideoMode(960, 960), "Tilemap");
+    sf::RenderWindow window(sf::VideoMode(960, 960), "Jeu de course F1");
     window.setFramerateLimit(30);
     window.setVerticalSyncEnabled(true);
-    // on définit le niveau à l'aide de numéro de tuiles
+    // --- on définit le niveau à l'aide de numéro de tuiles ----
     int level[] =
     {
         2,2,2,2,1,3,0,3,0,0,1,2,2,2,2,
@@ -45,10 +45,10 @@ int main()
     // pour simuler une tilemap infini, on crée 3 tilemap
     Jeu jeu(level); 
 
-    // création de l'objet voiture
+    // --- création de l'objet voiture de l'utilisateur ----
     Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3,true);
 
-    // initialisation des données de position et d'état
+    // --- initialisation des données de position et d'état ---
     map<string, bool> keyboardTracker{{"leftPressed",false}, {"rightPressed",false}, {"enterPressed",false}};
     float vitesse = 0.0f;
     float carburant = 0.f;
@@ -56,23 +56,25 @@ int main()
     const float maxX = 640.f;
     std::chrono::steady_clock::time_point lastMoveTime = std::chrono::steady_clock::now();
 
-    // gestion des collisions
+    // --- gestion des collisions ----
     bool invincible = false;
     bool inbuffable = false;
-    sf::Clock timer_invicible;
-    sf::Clock timer_nonbuffable;
-    sf::Clock clockObs;
-    sf::Clock clockBon;
+    map<string, sf::Clock> timerTracker{{"timer_invincible", sf::Clock()}, {"timer_nonbuffable", sf::Clock()},
+                                        {"timer_no_obstacles", sf::Clock()}, {"timer_no_buff", sf::Clock()}};
 
+    // --- attachage du tableau de bord à la voiture ----
     AffichageDonnees affichage(voiture);
+
+    // --- gestion des feux ----
     FeuDepart feu;
 
-    bool fauxDepart = false; // Indicateur pour le faux départ
     sf::Clock fauxDepartClock; // Chronomètre pour le faux départ
-    bool enteringRace = false; // Indique si le joueur a appuyé sur Enter pour démarrer la course
-
     sf::Clock reactedTime; // Chronomètre de temps de réaction
     reactedTime.restart();
+
+    bool fauxDepart = false; // Indicateur pour le faux départ
+    bool enteringRace = false; // Indique si le joueur a appuyé sur Enter pour démarrer la course
+
     float first_time = 0.0;
     float second_time = 0.0;
     int firstLoop = 0;
@@ -115,16 +117,17 @@ int main()
             feu.hideFeuSprite();
             if (vitesse > 5)
             {
-                if (clockObs.getElapsedTime().asSeconds() > 50/(vitesse)) // plus la voiture va vite, plus les élements de jeu apparaissent vite
+                // plus la voiture va vite, plus les élements de jeu apparaissent vite
+                if (timerTracker["timer_no_obstacles"].getElapsedTime().asSeconds() > 50/(vitesse)) 
                 {
                     jeu.spawn_obstacle();
-                    clockObs.restart();
+                    timerTracker["timer_no_obstacles"].restart();
                 }
-                if (clockBon.getElapsedTime().asSeconds() > 75/(vitesse))
+                if (timerTracker["timer_no_buff"].getElapsedTime().asSeconds() > 75/(vitesse))
                 {
                     
                     jeu.spawn_bonus();
-                    clockBon.restart();
+                    timerTracker["timer_no_buff"].restart();
                 }
             }
     
@@ -139,18 +142,18 @@ int main()
             if (!invincible)
                 if (jeu.checkCollisionObs(voiture)){
                     invincible = true;
-                    timer_invicible.restart();
+                    timerTracker["timer_invincible"].restart();
                 }
-            if (timer_invicible.getElapsedTime().asSeconds() > 3.f)
+            if (timerTracker["timer_invincible"].getElapsedTime().asSeconds() > 3.f)
                 invincible = false;
 
             // gestion bonus
             if (!inbuffable)
                 if (jeu.checkCollisionBonus(voiture)){
                     inbuffable = true;
-                    timer_nonbuffable.restart();
+                    timerTracker["timer_nonbuffable"].restart();
                 }
-            if (timer_nonbuffable.getElapsedTime().asSeconds() > 3.f)
+            if (timerTracker["timer_nonbuffable"].getElapsedTime().asSeconds() > 3.f)
                 inbuffable = false;
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
