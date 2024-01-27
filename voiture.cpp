@@ -54,11 +54,11 @@ float Voiture::getMaxHp() const {
 // }
 
 void Voiture::speedUp() {
-    if (_fuel > 0.0){
+    if (_fuel > 0.0 && getPosition().x > 320 && getPosition().x < 640){ 
         _speed += 0.01*((10/_speed) + 1);
         if (_speed > _maxSpeed)
             _speed = _maxSpeed;
-    } else { // perte de vitese due au manque de carburant
+    } else { // perte de vitese due au manque de carburant ou lorsque la voitrue est sur la piste de sable
         _speed -= 0.01*sqrt(_speed*0.5);
         if (_speed < 0.0001)
             _speed = 0.0;
