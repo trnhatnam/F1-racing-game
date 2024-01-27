@@ -1,5 +1,4 @@
 #include "jeu.hpp"
-#include <typeinfo>
 
 Jeu::Jeu(int* level):_level(level)
 {

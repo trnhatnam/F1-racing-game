@@ -10,6 +10,9 @@
 #include <sstream>
 #include <iomanip>
 #include <time.h>
+#include <map>
+#include <string>
+using namespace std;
 
 int main()
 {
@@ -46,13 +49,11 @@ int main()
     Voiture voiture(320, 600, 0, 50, 20, 20, 3, 3,true);
 
     // initialisation des données de position et d'état
+    map<string, bool> keyboardTracker{{"leftPressed",false}, {"rightPressed",false}, {"enterPressed",false}};
     float vitesse = 0.0f;
     float carburant = 0.f;
     const float minX = 256.f;
     const float maxX = 640.f;
-    bool leftPressed = false;
-    bool rightPressed = false;
-    bool enterPressed = false;
     std::chrono::steady_clock::time_point lastMoveTime = std::chrono::steady_clock::now();
 
     // gestion des collisions
@@ -96,7 +97,7 @@ int main()
         if (!enteringRace) {
             if (feu.isReady() && feu.getCurrentState() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
                 second_time = reactedTime.getElapsedTime().asSeconds();
-                enterPressed = true;
+                keyboardTracker["enterPressed"] = true;
                 enteringRace = true;
                 if (vitesse == 0)
                     // demarrage de la voiture
@@ -110,7 +111,7 @@ int main()
             }
         }
         else { 
-        if (enterPressed){
+        if (keyboardTracker["enterPressed"]){
             feu.hideFeuSprite();
             if (vitesse > 5)
             {
@@ -153,13 +154,13 @@ int main()
                 inbuffable = false;
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                voiture.move_left(minX,leftPressed,lastMoveTime);
+                voiture.move_left(minX,keyboardTracker["leftPressed"],lastMoveTime);
             else
-                leftPressed = false;
+                keyboardTracker["leftPressed"] = false;
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                voiture.move_right(maxX,rightPressed,lastMoveTime);
+                voiture.move_right(maxX,keyboardTracker["rightPressed"],lastMoveTime);
             else
-                rightPressed = false;
+                keyboardTracker["rightPressed"] = false;
 
             affichage += jeu.getPositionMap1(); // mise à jour des données de chrono, distance et vitesse
             }
@@ -177,7 +178,7 @@ int main()
         if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0))
         {
             feu.hideFeuSprite();
-            enterPressed = false;
+            keyboardTracker["enterPressed"] = false;
             affichage.gameOverNotice(window);
         }
 
