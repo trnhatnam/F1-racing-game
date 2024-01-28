@@ -58,6 +58,11 @@ float Voiture::getMaxHp() const {
     return _maxHp;
 }
 
+// Fonction accesseur de l'état de la voiture
+bool Voiture::getUser() const {
+    return _user;
+}
+
 // void Voiture::startspeedUp() {
 //     _speed += 5.0;
 // }
@@ -185,7 +190,7 @@ void Voiture::move_right(float maxX, bool& rightPressed, std::chrono::steady_clo
     }
 }
 
-// Fonction accesseur de la valeur
+// Fonction accesseur de la valeur de l'obstacle voiture
 int Voiture::getValue() const
 {
     return valeur;

@@ -8,8 +8,8 @@
 class Voiture : public Obstacle{
 private:
     // Attributs de la classe Voiture
-    float _maxSpeed;        // Vitesse Max (de la voiture)
     float _speed;           // Vitesse actuelle (de la voiture)
+    float _maxSpeed;        // Vitesse Max (de la voiture)
     float _fuel;            // Carburant actuel
     float _maxFuel;         // Carburant Max
     float _hp;              // Points de vie 
@@ -30,6 +30,7 @@ public:
     float getHp() const;
     float getMaxHp() const;
     int getValue() const;
+    bool getUser() const;
 
     bool collision(Obstacle& obs);
     bool collision(Bonus& bonus);
