@@ -13,7 +13,9 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
 {
     public:
     // lié aux évenments en jeu
+        // Constructeur de la classe Jeu
         Jeu(int* level);
+        // Méthodes de la classe Jeu
         void spawn_obstacle();
         void spawn_bonus();
         void clear();

@@ -75,9 +75,9 @@ int main()
     bool fauxDepart = false; // Indicateur pour le faux départ
     bool enteringRace = false; // Indique si le joueur a appuyé sur Enter pour démarrer la course
 
-    float first_time = 0.0;
-    float second_time = 0.0;
-    int firstLoop = 0;
+    float first_time = 0.0; // Valeur du chrono lors de l'activation du démarrage autorisé
+    float second_time = 0.0; // Valeur du chrono lors de l'activation du jeu par l'utilisateur
+    int firstLoop = 0;      // Valeur du nombre de cycle effectué pour les feux (0 cycle fini donc démarrage non autorisé, 1 cycle fini donc démarrage autorisé)
 
     // on fait tourner la boucle principale
     while (window.isOpen())
@@ -96,11 +96,13 @@ int main()
         // Gestion du faux départ
         feu.gestionFeu(feu, fauxDepart, enteringRace, firstLoop, first_time, fauxDepartClock, reactedTime);
 
+        // Gestion du lancement du jeu
         if (!enteringRace) {
+            // Départ autorisé
             if (feu.isReady() && feu.getCurrentState() == 0 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)){
                 second_time = reactedTime.getElapsedTime().asSeconds();
                 keyboardTracker["enterPressed"] = true;
-                enteringRace = true;
+                enteringRace = true;        // Lancement du jeu
                 if (vitesse == 0)
                     // demarrage de la voiture
                     voiture += 5.f;
@@ -112,60 +114,61 @@ int main()
                 affichage.startChrono();
             }
         }
-        else { 
-        if (keyboardTracker["enterPressed"]){
-            feu.setColor(sf::Color(0,0,0,0));
-            if (vitesse > 5)
-            {
-                // plus la voiture va vite, plus les élements de jeu apparaissent vite
-                if (timerTracker["timer_no_obstacles"].getElapsedTime().asSeconds() > 50/(vitesse)) 
+        else {      // Gestion des éléments au sein du jeu lancé
+            if (keyboardTracker["enterPressed"]){
+                feu.setColor(sf::Color(0,0,0,0));       // Dsiparition des feux
+                if (vitesse > 5)
                 {
-                    jeu.spawn_obstacle();
-                    timerTracker["timer_no_obstacles"].restart();
+                    // plus la voiture va vite, plus les élements de jeu apparaissent vite
+                    if (timerTracker["timer_no_obstacles"].getElapsedTime().asSeconds() > 50/(vitesse)) 
+                    {
+                        jeu.spawn_obstacle();
+                        timerTracker["timer_no_obstacles"].restart();
+                    }
+                    if (timerTracker["timer_no_buff"].getElapsedTime().asSeconds() > 75/(vitesse))
+                    {
+                        
+                        jeu.spawn_bonus();
+                        timerTracker["timer_no_buff"].restart();
+                    }
                 }
-                if (timerTracker["timer_no_buff"].getElapsedTime().asSeconds() > 75/(vitesse))
-                {
-                    
-                    jeu.spawn_bonus();
-                    timerTracker["timer_no_buff"].restart();
-                }
-            }
-    
-            jeu.clear();
-            vitesse = voiture.getSpeed();
-            carburant = voiture.getfuel();
-            voiture.speedUp();
-            voiture.useFuel();
-            jeu.move(vitesse);
+                // Nettoyage et actualisation des éléments du jeu
+                jeu.clear();
+                vitesse = voiture.getSpeed();
+                carburant = voiture.getfuel();
+                voiture.speedUp();
+                voiture.useFuel();
+                jeu.move(vitesse);
 
-            // gestion obstacle
-            if (!invincible)
-                if (jeu.checkCollisionObs(voiture)){
-                    invincible = true;
-                    timerTracker["timer_invincible"].restart();
-                }
-            if (timerTracker["timer_invincible"].getElapsedTime().asSeconds() > 3.f)
-                invincible = false;
+                // gestion obstacle
+                if (!invincible)
+                    if (jeu.checkCollisionObs(voiture)){
+                        invincible = true;
+                        timerTracker["timer_invincible"].restart();
+                    }
+                if (timerTracker["timer_invincible"].getElapsedTime().asSeconds() > 3.f)
+                    invincible = false;
 
-            // gestion bonus
-            if (!inbuffable)
-                if (jeu.checkCollisionBonus(voiture)){
-                    inbuffable = true;
-                    timerTracker["timer_nonbuffable"].restart();
-                }
-            if (timerTracker["timer_nonbuffable"].getElapsedTime().asSeconds() > 3.f)
-                inbuffable = false;
+                // gestion bonus
+                if (!inbuffable)
+                    if (jeu.checkCollisionBonus(voiture)){
+                        inbuffable = true;
+                        timerTracker["timer_nonbuffable"].restart();
+                    }
+                if (timerTracker["timer_nonbuffable"].getElapsedTime().asSeconds() > 3.f)
+                    inbuffable = false;
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                voiture.move_left(minX,keyboardTracker["leftPressed"],lastMoveTime);
-            else
-                keyboardTracker["leftPressed"] = false;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                voiture.move_right(maxX,keyboardTracker["rightPressed"],lastMoveTime);
-            else
-                keyboardTracker["rightPressed"] = false;
+                // gestion des déplacements de la voiture
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                    voiture.move_left(minX,keyboardTracker["leftPressed"],lastMoveTime);
+                else
+                    keyboardTracker["leftPressed"] = false;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                    voiture.move_right(maxX,keyboardTracker["rightPressed"],lastMoveTime);
+                else
+                    keyboardTracker["rightPressed"] = false;
 
-            affichage += jeu.getPositionMap1(); // mise à jour des données de chrono, distance et vitesse
+                affichage += jeu.getPositionMap1(); // mise à jour des données de chrono, distance et vitesse
             }
         }
         // on dessine le niveau
@@ -175,16 +178,17 @@ int main()
         window.draw(affichage); // affichage du chrono, de la distance et de la vitesse, vie
         affichage.drawSpeedometer(window); // affichage de la jauge de vitesse
         affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
-        if(enteringRace)
+        if(enteringRace)        // affichage du temps de réaction
             affichage.ReactedTime(window,first_time,second_time);
         
+        // affichage du "GameOver"
         if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0))
         {
             keyboardTracker["enterPressed"] = false;
             affichage.gameOverNotice(window);
         }
 
-        window.draw(feu);
+        window.draw(feu);       // affichage des feux de départ
         window.display();
         }
     
