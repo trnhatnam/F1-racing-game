@@ -1,9 +1,9 @@
 #include "FeuDepart.hh"
 
 FeuDepart::FeuDepart() : currentState(0), readyToStart(false), _valeur(0) {
-    tileset.loadFromFile("assets/tilesetFeu.png");
+    tileset.loadFromFile("assets/tilesetFeu_all.png");
     setTexture(tileset);
-    setTextureRect(sf::IntRect(0,0,280,140));
+    setTextureRect(sf::IntRect(0,0,300,140));
     setPosition(2.f, 200.f); // Position du feu de départ
     setScale(sf::Vector2f(0.8f, 0.8f));
 }
@@ -24,7 +24,7 @@ void FeuDepart::updateFeuDepart() {
         }
         if(firstLoop == 0 || nextState == 0){
             currentState = nextState;
-            setTextureRect(sf::IntRect(0,140*currentState,280,140));
+            setTextureRect(sf::IntRect(0,140*currentState,300,140));
         }
     }
 }
@@ -40,7 +40,7 @@ int FeuDepart::getCurrentState() const {
 void FeuDepart::reinitialiserFeu() {
     currentState = 0;
     readyToStart = false;
-    setTextureRect(sf::IntRect(0,0,280,140)); // Utilisation de la première texture par défaut
+    setTextureRect(sf::IntRect(0,0,300,140)); // Utilisation de la première texture par défaut
 }
 
 void FeuDepart::gestionFeu(FeuDepart& feu, bool& fauxDepart, bool& enteringRace, int& firstLoop, float& first_time, sf::Clock& fauxDepartClock, sf::Clock& reactedTime) {
@@ -52,7 +52,7 @@ void FeuDepart::gestionFeu(FeuDepart& feu, bool& fauxDepart, bool& enteringRace,
     if (fauxDepart) {
         // Affichage de l'image f1_feu_dep_faux_dep.png pendant 3 secondes
         if (fauxDepartClock.getElapsedTime().asSeconds() < 1.5f) {
-            setTextureRect(sf::IntRect(0,840,280,140));
+            setTextureRect(sf::IntRect(0,980,300,140));
         } else {
             fauxDepart = false;
             feu.reinitialiserFeu();
