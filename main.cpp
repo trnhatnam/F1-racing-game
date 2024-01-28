@@ -114,7 +114,7 @@ int main()
         }
         else { 
         if (keyboardTracker["enterPressed"]){
-            feu.hideFeuSprite();
+            feu.setColor(sf::Color(0,0,0,0));
             if (vitesse > 5)
             {
                 // plus la voiture va vite, plus les élements de jeu apparaissent vite
@@ -180,12 +180,11 @@ int main()
         
         if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0))
         {
-            feu.hideFeuSprite();
             keyboardTracker["enterPressed"] = false;
             affichage.gameOverNotice(window);
         }
 
-        feu.draw(window);
+        window.draw(feu);
         window.display();
         }
     

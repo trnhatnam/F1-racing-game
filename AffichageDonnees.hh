@@ -64,13 +64,13 @@ public:
     void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed);
     void gameOverNotice(sf::RenderWindow& window);
 
-    sf::Text parametrage_chrono(sf::Text textFont);
-    sf::Text parametrage_vitesse(sf::Text textFont);
-    sf::Text parametrage_distance(sf::Text textFont);
-    sf::Text parametrage_vitesseMax(sf::Text textFont);
-    sf::Text parametrage_reacted_time(sf::Text textFont);
-    sf::Sprite logo_speed(sf::Sprite SpeedSprite);
-    sf::Sprite logo_tank(sf::Sprite OilSprite);
-    sf::Sprite logo_feu_dep(sf::Sprite FeuDepartSprite);
+    sf::Text parametrage_chrono(sf::Text& textFont);
+    sf::Text parametrage_vitesse(sf::Text& textFont);
+    sf::Text parametrage_distance(sf::Text& textFont);
+    sf::Text parametrage_vitesseMax(sf::Text& textFont);
+    sf::Text parametrage_reacted_time(sf::Text& textFont);
+    sf::Sprite logo_speed(sf::Sprite& SpeedSprite);
+    sf::Sprite logo_tank(sf::Sprite& OilSprite);
+    sf::Sprite logo_feu_dep(sf::Sprite& FeuDepartSprite);
     void checkpointNotice(sf::RenderWindow& window);
 };

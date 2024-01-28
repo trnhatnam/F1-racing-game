@@ -29,7 +29,7 @@ AffichageDonnees::AffichageDonnees(Voiture& v) : initialMapPositionY(0.f), dista
     FeuSprite = logo_feu_dep(FeuSprite);
 }
 
-sf::Text AffichageDonnees::parametrage_chrono(sf::Text textFont) {
+sf::Text AffichageDonnees::parametrage_chrono(sf::Text& textFont) {
     textFont.setFont(font);
     textFont.setCharacterSize(24);
     textFont.setFillColor(sf::Color::Black);
@@ -39,7 +39,7 @@ sf::Text AffichageDonnees::parametrage_chrono(sf::Text textFont) {
     return textFont;
 }
 
-sf::Text AffichageDonnees::parametrage_distance(sf::Text textFont) {
+sf::Text AffichageDonnees::parametrage_distance(sf::Text& textFont) {
     textFont.setFont(font);
     textFont.setCharacterSize(18);
     textFont.setFillColor(sf::Color::White);
@@ -50,7 +50,7 @@ sf::Text AffichageDonnees::parametrage_distance(sf::Text textFont) {
 }
 
 
-sf::Text AffichageDonnees::parametrage_vitesse(sf::Text textFont) {
+sf::Text AffichageDonnees::parametrage_vitesse(sf::Text& textFont) {
     textFont.setFont(font);
     textFont.setCharacterSize(24);
     textFont.setFillColor(sf::Color::Black);
@@ -60,7 +60,7 @@ sf::Text AffichageDonnees::parametrage_vitesse(sf::Text textFont) {
     return textFont;
 }
 
-sf::Text AffichageDonnees::parametrage_vitesseMax(sf::Text textFont) {
+sf::Text AffichageDonnees::parametrage_vitesseMax(sf::Text& textFont) {
     textFont.setFont(font);
     textFont.setCharacterSize(18);
     textFont.setFillColor(sf::Color::Black);
@@ -70,7 +70,7 @@ sf::Text AffichageDonnees::parametrage_vitesseMax(sf::Text textFont) {
     return textFont;
 }
 
-sf::Text AffichageDonnees::parametrage_reacted_time(sf::Text textFont) {
+sf::Text AffichageDonnees::parametrage_reacted_time(sf::Text& textFont) {
     textFont.setFont(font);
     textFont.setCharacterSize(18);
     textFont.setFillColor(sf::Color::Black);
@@ -80,7 +80,7 @@ sf::Text AffichageDonnees::parametrage_reacted_time(sf::Text textFont) {
     return textFont;
 }
 
-sf::Sprite AffichageDonnees::logo_speed(sf::Sprite SpeedSprite) {
+sf::Sprite AffichageDonnees::logo_speed(sf::Sprite& SpeedSprite) {
     if(!SpeedPicture.loadFromFile("assets/max_speed.png")){
         std::cerr << "Erreur lors du chargement de l'image du compteur" << std::endl;
         EXIT_FAILURE;
@@ -92,7 +92,7 @@ sf::Sprite AffichageDonnees::logo_speed(sf::Sprite SpeedSprite) {
     return SpeedSprite;
 }
 
-sf::Sprite AffichageDonnees::logo_tank(sf::Sprite OilSprite) {
+sf::Sprite AffichageDonnees::logo_tank(sf::Sprite& OilSprite) {
     if(!TankPicture.loadFromFile("assets/pompe_car.png")){
         std::cerr << "Erreur lors du chargement de l'image de la pompe" << std::endl;
         EXIT_FAILURE;
@@ -103,7 +103,7 @@ sf::Sprite AffichageDonnees::logo_tank(sf::Sprite OilSprite) {
     return OilSprite;
 }
 
-sf::Sprite AffichageDonnees::logo_feu_dep(sf::Sprite FeuDepartSprite) {
+sf::Sprite AffichageDonnees::logo_feu_dep(sf::Sprite& FeuDepartSprite) {
     if(!FeuTexture.loadFromFile("assets/f1_feu_dep_tmp_rec.png")){
         std::cerr << "Erreur lors du chargement de l'image du feu" << std::endl;
         EXIT_FAILURE;
