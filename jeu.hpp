@@ -31,7 +31,6 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         // pour simuler une map infinie, on crée 3 tilemap et on les fait défiler façon tapis roulant
         
         int* _level;
-        string skin;
         TileMap map1;
         TileMap map2;  
         TileMap map3;
