@@ -72,5 +72,4 @@ public:
     sf::Sprite logo_speed(sf::Sprite& SpeedSprite);
     sf::Sprite logo_tank(sf::Sprite& OilSprite);
     sf::Sprite logo_feu_dep(sf::Sprite& FeuDepartSprite);
-    void checkpointNotice(sf::RenderWindow& window);
 };
