@@ -9,14 +9,28 @@ FeuDepart::FeuDepart() : currentState(0), readyToStart(false), _valeur(0) {
     setScale(sf::Vector2f(0.8f, 0.8f));                     // Mise à l'échelle
 }
 
+// Fonction pour générer un délai aléatoire entre min et max
+float genererDelaiAleatoire(float min, float max) {
+    return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
+}
+
 //Fonction d'actualisation de FeuDepart
 void FeuDepart::updateFeuDepart() {
     static sf::Clock feuClock;
     int nextState = currentState;
     static int firstLoop;
+    // Introduction un délai aléatoire seulement lors du passage de l'état 5 à l'état 0
+    float delaiAleatoire = genererDelaiAleatoire(0.2f, 1.5f);
 
-    // Logique pour passer d'un état à l'autre toutes les 0.5 seconde
-    if (feuClock.getElapsedTime().asSeconds() > 0.5f) {
+    // Logique pour passer d'un état à l'autre toutes les 0.5 seconde (exception de l'état 5 à 0 dans else if)
+    if (feuClock.getElapsedTime().asSeconds() > 0.5f && nextState < 5) {
+        feuClock.restart();     // Reinitialisation du chrono du feu affiché
+        ++nextState;            // Nouvel état du feu
+        if(firstLoop == 0 || nextState == 0){       // Mise à jour de l'image du feu de départ
+            currentState = nextState;               // Actualisation de l'état du feu
+            setTextureRect(sf::IntRect(0,140*currentState,300,140));
+        }
+    } else if (feuClock.getElapsedTime().asSeconds() > delaiAleatoire && nextState == 5) {
         feuClock.restart();     // Reinitialisation du chrono du feu affiché
         ++nextState;            // Nouvel état du feu
         if (nextState > 5) {
