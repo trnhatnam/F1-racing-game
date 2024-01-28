@@ -28,6 +28,9 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
     
     // getter
         float getPositionMap1();
+        int getObstaclesCount() const;
+        int getBonusesCount() const;
+        int getVoituresObsCount() const;
 
     private:
         // pour simuler une map infinie, on crée 3 tilemap et on les fait défiler façon tapis roulant

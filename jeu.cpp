@@ -126,3 +126,15 @@ bool Jeu::checkCollisionBonus(Voiture &v)
             return true;
     return false;
 }
+
+int Jeu::getObstaclesCount() const {
+    return vect_obstacles.size();
+}
+
+int Jeu::getBonusesCount() const {
+    return vect_bonus.size();
+}
+
+int Jeu::getVoituresObsCount() const {
+    return vect_voiture.size();
+}

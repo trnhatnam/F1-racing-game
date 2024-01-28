@@ -6,10 +6,10 @@ TST= $(wildcard *.cpp)
 OBJ_TEST = $(filter-out ../main.o, $(OBJ)) $(TST:.cpp=.o)
 
 testcase.out : $(OBJ_TEST) 
-	$(CC) $(CCFLAGS)  -o $@ $^
+	$(CC) $(CCFLAGS)  -o $@ $^ -lsfml-graphics -lsfml-window -lsfml-system; ./testcase.out
 
 %.o: %.cpp
 	$(CC) $(CCFLAGS) -I../ -o $@ -c $<
 
 clean :
-	rm -f TestCase.o $(OBJ_TEST) 
+	rm -f testcase.out $(OBJ_TEST) 
