@@ -2,28 +2,23 @@
 
 Jeu::Jeu(int* level):_level(level)
 {
-    if (!map1.load("assets/tileset.png", sf::Vector2u(64, 64), level, 15, 15) ||
-        !map2.load("assets/tileset.png", sf::Vector2u(64, 64), level, 15, 15) ||
-        !map3.load("assets/tileset.png", sf::Vector2u(64, 64), level, 15, 15))
-        std::cout << "Erreur initialisation des maps" << std::endl;
-    
-    map1.setPosition(0.f, 0.f);
-    map2.setPosition(0.f, -960.f);
-    map3.setPosition(0.f, -960.f*2);
+    for (int i=0; i<3; i++)
+    {
+        TileMap map;
+        map.load("assets/tileset.png", sf::Vector2u(64, 64), level, 15, 15);
+        map.setPosition(0.f,i*960.f);
+        maps.push_back(map);
+    }
 }
 
 void Jeu::move(float offsetY)
 {
-    if (map1.getPosition().y >= 960.f)
-        map1.setPosition(0.f, -960.f + (map1.getPosition().y - 960.f));
-    if (map2.getPosition().y >= 960.f)
-        map2.setPosition(0.f, -960.f + (map2.getPosition().y - 960.f));
-    if (map3.getPosition().y >= 960.f)
-        map3.setPosition(0.f, -960.f + (map3.getPosition().y - 960.f));
-    
-    map1.move(0.f,offsetY);
-    map2.move(0.f,offsetY);
-    map3.move(0.f,offsetY);
+    for (auto& map : maps)
+    {
+        if (map.getPosition().y >= 960.f)
+            map.setPosition(0.f, -960.f + (map.getPosition().y - 960.f));
+        map.move(0.f,offsetY);
+    }
 
     for (auto& obs : vect_obstacles)
         obs.move(0.f, offsetY);
@@ -88,9 +83,8 @@ void Jeu::clear()
 void Jeu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform *= getTransform();
-    target.draw(map1);
-    target.draw(map2);
-    target.draw(map3);
+    for (auto& map : maps)
+        target.draw(map);
     for (auto& bon : vect_bonus)
         target.draw(bon);
     for (auto& obs : vect_obstacles)
@@ -100,7 +94,7 @@ void Jeu::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 float Jeu::getPositionMap1(){
-    return map1.getPosition().y;
+    return maps[0].getPosition().y;
 }
 
 bool Jeu::checkCollisionObs(Voiture &v)

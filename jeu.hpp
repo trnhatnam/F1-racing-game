@@ -31,9 +31,10 @@ class Jeu: public sf::Drawable, public sf::Transformable // moteur de jeu
         // pour simuler une map infinie, on crée 3 tilemap et on les fait défiler façon tapis roulant
         
         int* _level;
-        TileMap map1;
-        TileMap map2;  
-        TileMap map3;
+        vector<TileMap> maps;
+        // TileMap map1;
+        // TileMap map2;  
+        // TileMap map3;
 
         // les vecteurs d'obstacles et bonus
         vector<Obstacle> vect_obstacles;
