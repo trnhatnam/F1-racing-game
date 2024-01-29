@@ -316,15 +316,15 @@ void AffichageDonnees::gameOverNotice(sf::RenderWindow& window){
 }
 
 // Fonction affichant et calculant le temps de réaction pour les feux de départ
-void AffichageDonnees::ReactedTime(sf::RenderWindow& window, float first_time, float second_time){
+void AffichageDonnees::ReactedTime(sf::RenderWindow& window, float first_time, float second_time, float& reacted_time){
     // Temps écoulé entre le départ autorisé et le départ réel
-    float elapsedTimeReact = second_time - first_time;      
+    reacted_time = second_time - first_time;      
     // Affichage du logo du Feu de départ pour le temps de réaction
     window.draw(FeuSprite);
 
     // Ecriture et stockage du temps de réaction
     std::ostringstream TempsReact;
-    TempsReact << std::fixed << std::setprecision(3) << elapsedTimeReact << " s";
+    TempsReact << std::fixed << std::setprecision(3) << reacted_time << " s";
     std::string TempsStr = TempsReact.str();
     tempsReaction.setString(TempsStr);
 }

@@ -64,10 +64,18 @@ TEST_CASE("Construct a car"){
 
   v1 += 5.0;
   CHECK(v1.getSpeed() == 5);
+
   v1.speedUp();
   v1.useFuel();
   CHECK(v1.getSpeed() > 5);
   CHECK(v1.getfuel() < v1.getMaxFuel());
+
+  float lastMaxSpeed = v1.getMaxSpeed();
+  float lastMaxFuel = v1.getMaxFuel();
+
+  v1.BonusMaxFuel_MaxSpeed();
+  CHECK(lastMaxSpeed < v1.getMaxSpeed());
+  CHECK(lastMaxFuel < v1.getMaxFuel());
 }
 
 TEST_CASE("Test de la classe Voiture") {
@@ -82,6 +90,10 @@ TEST_CASE("Test de la classe Voiture") {
         CHECK_EQ(maVoiture.getMaxFuel(), 100.0);
         CHECK_EQ(maVoiture.getHp(), 3);
         CHECK_EQ(maVoiture.getMaxHp(), 3);
+
+        maVoiture.BonusMaxFuel_MaxSpeed();
+        CHECK_EQ(maVoiture.getMaxSpeed(),11.0);
+        CHECK_EQ(maVoiture.getMaxFuel(),120.0);
     }
 
     SUBCASE("Test de la fonction speedUp et UseFuel") {

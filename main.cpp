@@ -77,6 +77,8 @@ int main()
 
     float first_time = 0.0; // Valeur du chrono lors de l'activation du démarrage autorisé
     float second_time = 0.0; // Valeur du chrono lors de l'activation du jeu par l'utilisateur
+    float temps_reaction = INFINITY; // Valeur du temps de réaction si inférieur à 250 ms, bonus de carburant Max et de vitesse Max
+    bool upgrade_implement = false;
     int firstLoop = 0;      // Valeur du nombre de cycle effectué pour les feux (0 cycle fini donc démarrage non autorisé, 1 cycle fini donc démarrage autorisé)
 
     // on fait tourner la boucle principale
@@ -176,11 +178,16 @@ int main()
         window.draw(jeu);
         window.draw(voiture);
         window.draw(affichage); // affichage du chrono, de la distance et de la vitesse, vie
-        affichage.drawSpeedometer(window); // affichage de la jauge de vitesse
-        affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
-        if(enteringRace)        // affichage du temps de réaction
-            affichage.ReactedTime(window,first_time,second_time);
-        
+        if(enteringRace){        // affichage du temps de réaction
+            affichage.ReactedTime(window,first_time,second_time, temps_reaction);
+            // Ajout de capacité de carburant et vitesse Max si le temps de réaction correspond aux professionnels (attention l'anticipation n'offre pas de bonus)
+            if(temps_reaction >= 0.15f && temps_reaction <= 0.275f && !upgrade_implement){
+                voiture.BonusMaxFuel_MaxSpeed();
+                upgrade_implement = true;
+            }
+            affichage.drawSpeedometer(window); // affichage de la jauge de vitesse
+            affichage.drawOilLevelBar(window); // affichage de la jauge de carburant
+        }
         // affichage du "GameOver"
         if (voiture.getHp() == 0 || (vitesse < 3 && vitesse > 0))
         {

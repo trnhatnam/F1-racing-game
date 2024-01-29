@@ -36,6 +36,7 @@ public:
     bool collision(Bonus& bonus);
 
     //void startspeedUp();
+    void BonusMaxFuel_MaxSpeed();
     void speedUp();
     void useFuel();
     void move_left(float minX, bool& leftPressed, std::chrono::steady_clock::time_point& lastMoveTime);

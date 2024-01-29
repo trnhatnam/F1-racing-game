@@ -202,3 +202,9 @@ Voiture& operator+=(Voiture& v, float offsetY)
     v._speed += offsetY;
     return v;
 }
+
+// Fonction amélioration de la capacité maximale du carburant et de la vitesse lors du temps de réaction adéquat (comparable aux pilotes de F1)
+void Voiture::BonusMaxFuel_MaxSpeed() {
+    _maxFuel += _maxFuel / 5;
+    _maxSpeed += _maxSpeed / 10;
+}

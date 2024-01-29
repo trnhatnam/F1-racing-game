@@ -64,7 +64,7 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawSpeedometer(sf::RenderWindow& target);
     void drawOilLevelBar(sf::RenderWindow& target);
-    void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed);
+    void ReactedTime(sf::RenderWindow& target, float appearanceState, float enterPressed, float& reacted_time);
     void gameOverNotice(sf::RenderWindow& window);
 
     sf::Text parametrage_chrono(sf::Text& textFont);
